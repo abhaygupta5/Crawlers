@@ -16,7 +16,6 @@ class QuestionItem(scrapy.Item):
     answer_3 = scrapy.Field()
     answer_type = scrapy.Field()
     question_type = scrapy.Field()
-    question_text = scrapy.Field()
     right_answer = scrapy.Field()
     difficulty_level = scrapy.Field()
     binary_file_path = scrapy.Field()
