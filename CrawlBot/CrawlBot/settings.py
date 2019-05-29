@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for Indiabix project
+# Scrapy settings for CrawlBot project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,14 +9,14 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'Indiabix'
+BOT_NAME = 'CrawlBot'
 
-SPIDER_MODULES = ['Indiabix.spiders']
-NEWSPIDER_MODULE = 'Indiabix.spiders'
+SPIDER_MODULES = ['CrawlBot.spiders']
+NEWSPIDER_MODULE = 'CrawlBot.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'Indiabix (+http://www.yourdomain.com)'
+#USER_AGENT = 'CrawlBot (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -47,13 +47,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'Indiabix.middlewares.IndiabixSpiderMiddleware': 543,
+#    'CrawlBot.middlewares.IndiabixSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'Indiabix.middlewares.IndiabixDownloaderMiddleware': 543,
+#    'CrawlBot.middlewares.IndiabixDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -65,7 +65,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'Indiabix.pipelines.IndiabixPipeline': 300,
+#    'CrawlBot.pipelines.IndiabixPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
