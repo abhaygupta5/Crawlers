@@ -91,5 +91,5 @@ ITEM_PIPELINES = {
 
 #Export as CSV Feed
 FEED_FORMAT = "csv"
-FEED_URI = "IndiaBix.csv"
+FEED_URI = "IndiaBixSingle.csv"
 FEED_EXPORT_FIELDS = ["question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path"]

@@ -31,5 +31,5 @@ class QuestionItem(scrapy.Item):
     QUESTION_TYPE_VIDEO_BASED = 'Video Based'
 
     DIFFICULTY_LEVEL_EASY = 'Easy'
-    DIFFICULTY_LEVEL_AVERAGE = 'Average'
+    DIFFICULTY_LEVEL_AVERAGE = 'Medium'
     DIFFICULTY_LEVEL_HARD = 'Hard'
