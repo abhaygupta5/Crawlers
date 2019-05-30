@@ -20,3 +20,16 @@ class QuestionItem(scrapy.Item):
     right_answer = scrapy.Field()
     difficulty_level = scrapy.Field()
     binary_file_path = scrapy.Field()
+
+    ANSWER_TYPE_SINGLE_CORRECT = 'Single-Correct'
+    ANSWER_TYPE_MULTI_CORRECT = 'Multi-Correct'
+    ANSWER_TYPE_ARRANGE_THE_ORDER = 'Arrange the order'
+
+    QUESTION_TYPE_TEXT_BASED = 'Text Based'
+    QUESTION_TYPE_IMAGE_BASED = 'Image Based'
+    QUESTION_TYPE_AUDIO_BASED = 'Audio Based'
+    QUESTION_TYPE_VIDEO_BASED = 'Video Based'
+
+    DIFFICULTY_LEVEL_EASY = 'Easy'
+    DIFFICULTY_LEVEL_AVERAGE = 'Average'
+    DIFFICULTY_LEVEL_HARD = 'Hard'
