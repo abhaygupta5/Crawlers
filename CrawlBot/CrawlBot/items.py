@@ -20,6 +20,7 @@ class QuestionItem(scrapy.Item):
     right_answer = scrapy.Field()
     difficulty_level = scrapy.Field()
     binary_file_path = scrapy.Field()
+    category = scrapy.Field()
 
     ANSWER_TYPE_SINGLE_CORRECT = 'Single-Correct'
     ANSWER_TYPE_MULTI_CORRECT = 'Multi-Correct'
