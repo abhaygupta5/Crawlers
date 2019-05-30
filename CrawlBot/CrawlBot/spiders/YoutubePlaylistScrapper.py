@@ -1,5 +1,5 @@
 from ..items import QuestionItem
-
+from ..WebsiteConfigurations import YoutubePlaylistSpiderConfig
 import scrapy
 import random
 import re
@@ -9,20 +9,30 @@ from selenium import webdriver
 
 class YoutubePlaylistSpider(scrapy.Spider):
     name = "YoutubePlaylistSpider"
-    start_urls = ['https://www.youtube.com/playlist?list=PL9oqVauEE2LIXtGYECl3wT1f5ae5EwDEZ']
-    path = "/Users/abhaygupta/Desktop/chromedriver"
+    myConf = YoutubePlaylistSpiderConfig(name)
+    start_urls = myConf.get_starting_urls()
+    categories = myConf.get_categories()
+    questions_text = 'Identify the '
+    url_index = -1
+
+    XPATH_LINKS= '//*[@id="content"]/a'
+    XPATH_TITLES ='//*[@id="video-title"]'
 
     def __init__(self):
+
+        # initialising selenium chrome driver with headless option
         self.selenium_options = webdriver.ChromeOptions()
         self.selenium_options.add_argument('headless')
-        self.driver = webdriver.Chrome(self.path, chrome_options=self.selenium_options)
+        self.driver = webdriver.Chrome(chrome_options=self.selenium_options)
+        #
 
     def parse(self, response):
+        self.url_index = self.url_index + 1
 
         try:
             self.driver.get(response.url)
-            links = self.driver.find_elements_by_xpath('//*[@id="content"]/a')
-            titles = self.driver.find_elements_by_xpath('//*[@id="video-title"]')
+            links = self.driver.find_elements_by_xpath(self.XPATH_LINKS)
+            titles = self.driver.find_elements_by_xpath(self.XPATH_TITLES)
 
             titles = [re.split('[|-]', t.text)[0] for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
@@ -68,7 +78,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
                                                i] + 1  # index starts with 0 here...changing it to start at 1
             question_item = QuestionItem()
 
-            question_item['question_text'] = 'Identify the song ?'
+            question_item['question_text'] = self.questions_text + self.categories[self.url_index]
             question_item['answer_1'] = option_a_list[i]
             question_item['answer_2'] = option_b_list[i]
             question_item['answer_3'] = option_c_list[i]
@@ -77,5 +87,6 @@ class YoutubePlaylistSpider(scrapy.Spider):
             question_item['right_answer'] = correct_answer_index_list[i]
             question_item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_EASY
             question_item['binary_file_path'] = links[i]
+            question_item['category'] = self.categories[self.url_index]
 
             yield question_item
