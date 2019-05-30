@@ -7,11 +7,9 @@ import re
 
 class IndiaBixSingleSpider(scrapy.Spider):
     name = "IndiaBixSingleSpider"
-    start_urls = ['https://www.indiabix.com/general-knowledge/basic-general-knowledge/005001',
-                  'https://www.indiabix.com/general-knowledge/general-science/036001',
-                  'https://www.indiabix.com/general-knowledge/indian-politics/002001',
-                  'https://www.indiabix.com/general-knowledge/books-and-authors/031001',
-                  'https://www.indiabix.com/general-knowledge/sports/012001']
+    f = open("url_indiabix_single.txt", "r")
+    start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
+    f.close()
 
     def parse(self, response):
         question_numbers = response.css(".bix-td-qno::text").getall()
@@ -139,8 +137,9 @@ class IndiaBixSingleSpider(scrapy.Spider):
 class IndiaBixArrangeSpider(scrapy.Spider):
 
     name = "IndiaBixArrangeSpider"
-    start_urls = ['https://www.indiabix.com/verbal-reasoning/logical-sequence-of-words/053001',
-                  'https://www.indiabix.com/verbal-reasoning/logical-sequence-of-words/070001']
+    f = open("url_indiabix_arrange.txt", "r")
+    start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
+    f.close()
 
     def parse(self, response):
         question_numbers = response.css(".bix-td-qno::text").getall()
