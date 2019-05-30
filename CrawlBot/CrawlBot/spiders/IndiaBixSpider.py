@@ -3,11 +3,12 @@ from ..items import QuestionItem
 import math
 import random
 import re
+import os
 
 
 class IndiaBixSingleSpider(scrapy.Spider):
     name = "IndiaBixSingleSpider"
-    f = open("url_indiabix_single.txt", "r")
+    f = open(os.getcwd()+"/CrawlBot/spiders/url_indiabix_single.txt", "r")
     start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
     f.close()
 
@@ -137,7 +138,7 @@ class IndiaBixSingleSpider(scrapy.Spider):
 class IndiaBixArrangeSpider(scrapy.Spider):
 
     name = "IndiaBixArrangeSpider"
-    f = open("url_indiabix_arrange.txt", "r")
+    f = open(os.getcwd()+"/CrawlBot/spiders/url_indiabix_arrange.txt", "r")
     start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
     f.close()
 

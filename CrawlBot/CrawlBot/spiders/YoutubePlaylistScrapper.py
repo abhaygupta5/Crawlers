@@ -10,11 +10,12 @@ from selenium import webdriver
 class YoutubePlaylistSpider(scrapy.Spider):
     name = "YoutubePlaylistSpider"
     start_urls = ['https://www.youtube.com/playlist?list=PL9oqVauEE2LIXtGYECl3wT1f5ae5EwDEZ']
+    path = "/Users/abhaygupta/Desktop/chromedriver"
 
     def __init__(self):
         self.selenium_options = webdriver.ChromeOptions()
         self.selenium_options.add_argument('headless')
-        self.driver = webdriver.Chrome(chrome_options=self.selenium_options)
+        self.driver = webdriver.Chrome(self.path, chrome_options=self.selenium_options)
 
     def parse(self, response):
 

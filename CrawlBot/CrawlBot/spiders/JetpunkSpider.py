@@ -6,18 +6,21 @@ from scrapy.http import HtmlResponse
 import math
 import random
 import time
+import os
 
 
 class JetpunkSpider(scrapy.Spider):
     name = "JetpunkSpider"
     base_url = "https://www.jetpunk.com"
-    f = open("url_jetpunk_images.txt", "r")
+    f = open(os.getcwd()+"/CrawlBot/spiders/url_jetpunk_images.txt", "r")
     start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
     f.close()
     path = "/Users/abhaygupta/Desktop/chromedriver"
 
     def parse(self, response):
-        driver = webdriver.Chrome(self.path)
+        selenium_options = webdriver.ChromeOptions()
+        selenium_options.add_argument('headless')
+        driver = webdriver.Chrome(self.path, chrome_options=selenium_options)
         driver.get(response.url)
         take_quiz = driver.find_element_by_xpath('//*[(@id = "start-button")]')
         take_quiz.click()
