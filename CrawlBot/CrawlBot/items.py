@@ -10,6 +10,7 @@ import scrapy
 
 class QuestionItem(scrapy.Item):
     # define the fields for your item here like:
+    _id = scrapy.Field()
     question_text = scrapy.Field()
     answer_1 = scrapy.Field()
     answer_2 = scrapy.Field()

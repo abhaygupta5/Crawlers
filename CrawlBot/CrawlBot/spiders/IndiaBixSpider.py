@@ -41,6 +41,7 @@ class IndiaBixSpider(scrapy.Spider):
         for index in range(len(question_numbers)):
             difficulty_index = 0
             item = QuestionItem()
+            item['_id'] = questions[index]
             item['question_text'] = questions[index]
             item['answer_type'] = 'Single-Correct'
             item['binary_file_path'] = None
