@@ -4,6 +4,7 @@ import math
 import random
 import re
 import os
+from ..WebsiteConfigurations import IndiaBixSingleSpiderConfig
 
 
 class IndiaBixSingleSpider(scrapy.Spider):
@@ -12,6 +13,9 @@ class IndiaBixSingleSpider(scrapy.Spider):
     f = open(os.getcwd()+"/CrawlBot/spiders/url_indiabix_single.txt", "r")
     start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
     f.close()
+    # myConf = IndiaBixSingleSpiderConfig(name)
+    # myConf.load_configs()
+    # start_urls = myConf.get_starting_urls()
 
     def parse(self, response):
         question_numbers = response.css(".bix-td-qno::text").getall()
