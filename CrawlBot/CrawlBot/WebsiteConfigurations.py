@@ -27,11 +27,9 @@ class YoutubePlaylistSpiderConfig(SpiderConfig):
         self.categories = []
         self.starting_urls = []
         self.spider_name = spider_name
-        self.web_configs = self.collection.find({'spider_name': self.spider_name})[0]
-        self.load_configs()
 
     def save_initial_data(self):
-        self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
+        # self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
 
         data = {
             'spider_name': 'YoutubePlaylistSpider',
@@ -51,14 +49,12 @@ class YoutubePlaylistSpiderConfig(SpiderConfig):
 
             ],
 
-            'XPATH_titles': '//*[@id="content"]/a',
-            'XPATH_links': '//*[@id="video-title"]'
-
         }
 
-        self.collection.insert(dict(data))
+        self.collection.update({'_id': self.spider_name}, dict(data), upsert=True)
 
     def load_configs(self):
+        self.web_configs = self.collection.find_one({'spider_name': self.spider_name})
         web_url_objects = self.web_configs['web_pages']
         for web_obj in web_url_objects:
             if web_obj['enable_crawling']:
@@ -68,11 +64,21 @@ class YoutubePlaylistSpiderConfig(SpiderConfig):
     def get_starting_urls(self):
         return self.starting_urls
 
-    def get_categories(self):
-        return self.categories
+    def get_video_start_time(self):
+        return 100;
+
+    def set_status(self, url, status):
+        web_url_objects = self.web_configs['web_pages']
+        for web_obj in web_url_objects:
+            if web_obj['url'] == url:
+                web_obj['status'] = status
+                break
+
+        self.collection.update({'_id': self.spider_name}, self.web_configs)
+        print('--------->UPDATING STATUS')
 
 
 if __name__ == '__main__':
     conf = YoutubePlaylistSpiderConfig('YoutubePlaylistSpider')
-    # conf.save_initial_data()
-    print(conf.get_categories())
+    conf.save_initial_data()
+    # print(conf.get_categories())

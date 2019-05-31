@@ -10,13 +10,16 @@ from selenium import webdriver
 class YoutubePlaylistSpider(scrapy.Spider):
     name = "YoutubePlaylistSpider"
     myConf = YoutubePlaylistSpiderConfig(name)
+    myConf.load_configs()
     start_urls = myConf.get_starting_urls()
-    categories = myConf.get_categories()
     questions_text = 'Identify the '
     url_index = -1
 
-    XPATH_LINKS= '//*[@id="content"]/a'
-    XPATH_TITLES ='//*[@id="video-title"]'
+    VIDEO_START_TIME = myConf.get_video_start_time()  # youtube urls with start time after this many seconds
+
+    XPATH_LINKS = '//*[@id="content"]/a'
+    XPATH_TITLES = '//*[@id="video-title"]'
+    XPATH_CATEGORY = '//*[@id="title"]/yt-formatted-string/a'
 
     def __init__(self):
 
@@ -27,20 +30,30 @@ class YoutubePlaylistSpider(scrapy.Spider):
         #
 
     def parse(self, response):
-        self.url_index = self.url_index + 1
+        print('Response :', response.url)
+
+        for i in range(len(self.start_urls)):
+            if response.url == self.start_urls[i]:
+                self.url_index = i
+                self.myConf.set_status(response.url, 'COMPLETED')
+                break
 
         try:
             self.driver.get(response.url)
             links = self.driver.find_elements_by_xpath(self.XPATH_LINKS)
             titles = self.driver.find_elements_by_xpath(self.XPATH_TITLES)
+            category = self.driver.find_element_by_xpath(self.XPATH_CATEGORY).text
 
             titles = [re.split('[|-]', t.text)[0] for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
             links = [l.get_attribute('href') for l in links]
-            self.driver.close()
 
+            # changing start time of the urls
+            links = [l[:-2] + str(self.VIDEO_START_TIME) + 's' for l in links]
+            # print(links)
         except Exception, e:
             print('Error occured', e.message)
+            self.myConf.set_status(response.url, "ERROR : "+e.message)
             self.driver.close()
 
         NUM_OF_SONGS = len(titles)
@@ -78,7 +91,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
                                                i] + 1  # index starts with 0 here...changing it to start at 1
             question_item = QuestionItem()
 
-            question_item['question_text'] = self.questions_text + self.categories[self.url_index]
+            question_item['question_text'] = self.questions_text + category
             question_item['answer_1'] = option_a_list[i]
             question_item['answer_2'] = option_b_list[i]
             question_item['answer_3'] = option_c_list[i]
@@ -87,6 +100,9 @@ class YoutubePlaylistSpider(scrapy.Spider):
             question_item['right_answer'] = correct_answer_index_list[i]
             question_item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_EASY
             question_item['binary_file_path'] = links[i]
-            question_item['category'] = self.categories[self.url_index]
+            question_item['category'] = category
 
             yield question_item
+
+    def __del__(self):
+        self.driver.close()

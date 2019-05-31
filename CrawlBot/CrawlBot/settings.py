@@ -93,3 +93,4 @@ ITEM_PIPELINES = {
 FEED_FORMAT = "csv"
 FEED_URI = "IndiaBixSingle.csv"
 FEED_EXPORT_FIELDS = ["question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path"]
+LOG_LEVEL = 'ERROR'  # to only display errors
