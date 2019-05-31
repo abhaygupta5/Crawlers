@@ -32,7 +32,7 @@ class YoutubePlaylistSpiderConfig(SpiderConfig):
         # self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
 
         data = {
-            'spider_name': 'YoutubePlaylistSpider',
+            'spider_name': self.spider_name,
             'web_pages': [
 
                 {
@@ -78,7 +78,86 @@ class YoutubePlaylistSpiderConfig(SpiderConfig):
         print('--------->UPDATING STATUS')
 
 
+class JetpunkSpiderConf(SpiderConfig):
+
+    def __init__(self, spider_name):
+        super(JetpunkSpiderConf, self).__init__()
+        self.categories = []
+        self.starting_urls = []
+        self.spider_name = spider_name
+
+    def save_initial_data(self):
+        # self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
+
+        data = {
+            'spider_name': self.spider_name,
+            'web_pages': [
+
+                {
+                    'url': 'https://www.jetpunk.com/quizzes/country-flag-1',
+                    'enable_crawling': True,
+                    'category': '',
+                    'status' : 'NOT STARTED'
+                },
+
+                {
+                    'url': 'https://www.jetpunk.com/user-quizzes/139806/brand-logos-quiz-1',
+                    'enable_crawling': True,
+                    'category': ''
+                },
+                {
+                    'url': 'https://www.jetpunk.com/user-quizzes/139806/car-logos-quiz',
+                    'enable_crawling': True,
+                    'category': ''
+                },
+
+                {
+                    'url': 'https://www.jetpunk.com/user-quizzes/139806/brand-logos-quiz-2',
+                    'enable_crawling': True,
+                    'category': ''
+                },
+
+                {
+                    'url': 'https://www.jetpunk.com/quizzes/car-logos-quiz-2',
+                    'enable_crawling': True,
+                    'category': ''
+                },
+
+                {
+                    'url': 'https://www.jetpunk.com/quizzes/random-logos-quiz',
+                    'enable_crawling': True,
+                    'category': ''
+                }
+
+            ]
+
+        }
+
+        self.collection.update({'_id': self.spider_name}, dict(data), upsert=True)
+
+    def load_configs(self):
+        self.web_configs = self.collection.find_one({'spider_name': self.spider_name})
+        web_url_objects = self.web_configs['web_pages']
+        for web_obj in web_url_objects:
+            if web_obj['enable_crawling']:
+                self.starting_urls.append(web_obj['url'])
+                self.categories.append(web_obj['category'])
+
+    def get_starting_urls(self):
+        return self.starting_urls
+
+    def set_status(self, url, status):
+        web_url_objects = self.web_configs['web_pages']
+        for web_obj in web_url_objects:
+            if web_obj['url'] == url:
+                web_obj['status'] = status
+                break
+
+        self.collection.update({'_id': self.spider_name}, self.web_configs)
+        print('--------->UPDATING STATUS')
+
+
 if __name__ == '__main__':
-    conf = YoutubePlaylistSpiderConfig('YoutubePlaylistSpider')
+    conf = JetpunkSpiderConf('JetpunkSpider')
     conf.save_initial_data()
     # print(conf.get_categories())

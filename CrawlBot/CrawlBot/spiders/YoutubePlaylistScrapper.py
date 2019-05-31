@@ -13,7 +13,6 @@ class YoutubePlaylistSpider(scrapy.Spider):
     myConf.load_configs()
     start_urls = myConf.get_starting_urls()
     questions_text = 'Identify :  '
-    url_index = -1
 
     VIDEO_START_TIME = myConf.get_video_start_time()  # youtube urls with start time after this many seconds
 
@@ -32,11 +31,6 @@ class YoutubePlaylistSpider(scrapy.Spider):
     def parse(self, response):
         print('Response :', response.url)
 
-        for i in range(len(self.start_urls)):
-            if response.url == self.start_urls[i]:
-                self.url_index = i
-                self.myConf.set_status(response.url, 'COMPLETED')
-                break
 
         try:
             self.driver.get(response.url)
@@ -52,6 +46,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
             # changing start time of the urls
             links = [l[:-2] + str(self.VIDEO_START_TIME) + 's' for l in links]
             # print(links)
+            self.myConf.set_status(response.url, 'COMPLETED')
         except Exception, e:
             print('Error occured', e.message)
             self.myConf.set_status(response.url, "ERROR : "+e.message)

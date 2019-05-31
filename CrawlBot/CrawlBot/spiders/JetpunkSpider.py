@@ -8,55 +8,62 @@ import random
 import time
 import os
 
+from ..WebsiteConfigurations import JetpunkSpiderConf
 
 class JetpunkSpider(scrapy.Spider):
+
     name = "JetpunkSpider"
     base_url = "https://www.jetpunk.com"
-    f = open(os.getcwd()+"/CrawlBot/spiders/url_jetpunk_images.txt", "r")
-    start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
-    f.close()
-    path = "/Users/abhaygupta/Desktop/chromedriver"
+    myConf = JetpunkSpiderConf(name)
+    myConf.load_configs()
+    start_urls = myConf.get_starting_urls()
+    # path = "/Users/abhaygupta/Desktop/chromedriver"
 
     def parse(self, response):
-        selenium_options = webdriver.ChromeOptions()
-        selenium_options.add_argument('headless')
-        driver = webdriver.Chrome(self.path, chrome_options=selenium_options)
-        driver.get(response.url)
-        take_quiz = driver.find_element_by_xpath('//*[(@id = "start-button")]')
-        take_quiz.click()
 
-        give_up = driver.find_element_by_xpath(
-            '//*[contains(concat( " ", @class, " " ), concat( " ", "link-like", " " ))]')
-        give_up.click()
+        try:
+            selenium_options = webdriver.ChromeOptions()
+            selenium_options.add_argument('headless')
+            driver = webdriver.Chrome(chrome_options=selenium_options)
+            driver.get(response.url)
+            take_quiz = driver.find_element_by_xpath('//*[(@id = "start-button")]')
+            take_quiz.click()
 
-        time.sleep(2)
-        # print("page source",self.driver.getPageSource())
-        html_response = HtmlResponse(url=response.url, body=driver.page_source, encoding='utf-8')
+            give_up = driver.find_element_by_xpath(
+                '//*[contains(concat( " ", @class, " " ), concat( " ", "link-like", " " ))]')
+            give_up.click()
 
-        page = Selector(response=html_response)
+            time.sleep(2)
+            # print("page source",self.driver.getPageSource())
+            html_response = HtmlResponse(url=response.url, body=driver.page_source, encoding='utf-8')
 
-        print(page.css('title::text').extract())
+            page = Selector(response=html_response)
 
-        number_of_questions = len(page.css(".photo-img").xpath('@src').extract())
-        print("number_of_questions ", number_of_questions)
+            print(page.css('title::text').extract())
 
-        question = response.css(".instructions::text").get()
+            number_of_questions = len(page.css(".photo-img").xpath('@src').extract())
+            print("number_of_questions ", number_of_questions)
 
-        correct_answers = page.css('.answer-display::text').extract()
+            question = response.css(".instructions::text").get()
 
-        print("correct ", correct_answers)
-        # print("length of correct_answers ",len(correct_answers))
+            correct_answers = page.css('.answer-display::text').extract()
 
-        # for answer in correct_answers:
-        #     print(answer)
+            print("correct ", correct_answers)
+            # print("length of correct_answers ",len(correct_answers))
 
-        # images
-        images = page.css('.photo-img').xpath('@src').extract()
-        for image in page.css('.photo-img').xpath('@src').extract():
-            link = self.base_url + image
-            # print(link)
+            # for answer in correct_answers:
+            #     print(answer)
 
-        driver.close()
+            # images
+            images = page.css('.photo-img').xpath('@src').extract()
+            for image in page.css('.photo-img').xpath('@src').extract():
+                link = self.base_url + image
+                # print(link)
+
+            self.myConf.set_status(response.url,'COMPLETED')
+        except Exception,e:
+            self.myConf.set_status(response.url,'ERROR : ' + e.message)
+
 
         number_of_easy_questions = math.floor(0.5 * number_of_questions)
         number_of_medium_questions = math.ceil(0.3 * number_of_questions)
@@ -74,7 +81,7 @@ class JetpunkSpider(scrapy.Spider):
             item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
             item['binary_file_path'] = self.base_url + images[index]
             item['question_type'] = QuestionItem.QUESTION_TYPE_IMAGE_BASED
-            item['_id'] = question+str(index)
+            # item['_id'] = question+str(index)
             if index_of_easy < number_of_easy_questions:
                 item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_EASY
                 index_of_easy += 1
@@ -118,3 +125,6 @@ class JetpunkSpider(scrapy.Spider):
         # if nextPage is not None:
         #     nextPage = response.urljoin(nextPage)
         #     yield scrapy.Request(nextPage, callback=self.parse)
+
+    def __del__(self):
+        self.driver.close()
