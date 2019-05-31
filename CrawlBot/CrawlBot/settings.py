@@ -90,7 +90,16 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 #Export as CSV Feed
-FEED_FORMAT = "csv"
+FEED_EXPORTERS = {
+    'csv': 'CrawlBot.custom_csv_class.MyProjectCsvItemExporter',
+}
+FIELDS_TO_EXPORT = [
+    "question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path"
+]
+CSV_DELIMITER = ";"
+
+# Command to run csv scrapy crawl IndiaBixArrangeSpider -o output.csv -t csv -a CSV_DELIMITER=";"
+
+#FEED_FORMAT = "csv"
 FEED_URI = "IndiaBixSingle.csv"
-FEED_EXPORT_FIELDS = ["question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path"]
-# LOG_LEVEL = 'ERROR'  # to only display errors
+#FEED_EXPORT_FIELDS = ["question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path"]

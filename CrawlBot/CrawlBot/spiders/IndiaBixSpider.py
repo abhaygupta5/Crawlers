@@ -8,6 +8,7 @@ import os
 
 class IndiaBixSingleSpider(scrapy.Spider):
     name = "IndiaBixSingleSpider"
+    delimiter = ';'
     f = open(os.getcwd()+"/CrawlBot/spiders/url_indiabix_single.txt", "r")
     start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
     f.close()
@@ -42,7 +43,7 @@ class IndiaBixSingleSpider(scrapy.Spider):
             difficulty_index = 0
             item = QuestionItem()
             item['_id'] = questions[index]
-            item['question_text'] = questions[index]
+            item['question_text'] = questions[index].strip()
             item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
             item['binary_file_path'] = None
             item['question_type'] = QuestionItem.QUESTION_TYPE_TEXT_BASED
@@ -61,70 +62,70 @@ class IndiaBixSingleSpider(scrapy.Spider):
             if str(correct_answers[index]) == "A":
                 # item['right_answer'] = options_A[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_A[index]
-                    item['answer_2'] = options_B[index]
-                    item['answer_3'] = options_C[index]
+                    item['answer_1'] = options_A[index].strip()
+                    item['answer_2'] = options_B[index].strip()
+                    item['answer_3'] = options_C[index].strip()
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_A[index]
-                    item['answer_1'] = options_D[index]
-                    item['answer_3'] = options_B[index]
+                    item['answer_2'] = options_A[index].strip()
+                    item['answer_1'] = options_D[index].strip()
+                    item['answer_3'] = options_B[index].strip()
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_A[index]
-                    item['answer_1'] = options_C[index]
-                    item['answer_2'] = options_D[index]
+                    item['answer_3'] = options_A[index].strip()
+                    item['answer_1'] = options_C[index].strip()
+                    item['answer_2'] = options_D[index].strip()
                     item['right_answer'] = "C"
             elif str(correct_answers[index]) == "B":
                 # item['right_answer'] = options_B[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_B[index]
-                    item['answer_2'] = options_A[index]
-                    item['answer_3'] = options_C[index]
+                    item['answer_1'] = options_B[index].strip()
+                    item['answer_2'] = options_A[index].strip()
+                    item['answer_3'] = options_C[index].strip()
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_B[index]
-                    item['answer_1'] = options_D[index]
-                    item['answer_3'] = options_A[index]
+                    item['answer_2'] = options_B[index].strip()
+                    item['answer_1'] = options_D[index].strip()
+                    item['answer_3'] = options_A[index].strip()
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_B[index]
-                    item['answer_1'] = options_C[index]
-                    item['answer_2'] = options_D[index]
+                    item['answer_3'] = options_B[index].strip()
+                    item['answer_1'] = options_C[index].strip()
+                    item['answer_2'] = options_D[index].strip()
                     item['right_answer'] = "C"
             elif str(correct_answers[index]) == "C":
                 # item['right_answer'] = options_C[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_C[index]
-                    item['answer_2'] = options_B[index]
-                    item['answer_3'] = options_A[index]
+                    item['answer_1'] = options_C[index].strip()
+                    item['answer_2'] = options_B[index].strip()
+                    item['answer_3'] = options_A[index].strip()
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_C[index]
-                    item['answer_1'] = options_D[index]
-                    item['answer_3'] = options_B[index]
+                    item['answer_2'] = options_C[index].strip()
+                    item['answer_1'] = options_D[index].strip()
+                    item['answer_3'] = options_B[index].strip()
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_C[index]
-                    item['answer_1'] = options_A[index]
-                    item['answer_2'] = options_D[index]
+                    item['answer_3'] = options_C[index].strip()
+                    item['answer_1'] = options_A[index].strip()
+                    item['answer_2'] = options_D[index].strip()
                     item['right_answer'] = "C"
             else:
                 # item['right_answer'] = options_D[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_D[index]
-                    item['answer_2'] = options_B[index]
-                    item['answer_3'] = options_C[index]
+                    item['answer_1'] = options_D[index].strip()
+                    item['answer_2'] = options_B[index].strip()
+                    item['answer_3'] = options_C[index].strip()
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_D[index]
-                    item['answer_1'] = options_A[index]
-                    item['answer_3'] = options_B[index]
+                    item['answer_2'] = options_D[index].strip()
+                    item['answer_1'] = options_A[index].strip()
+                    item['answer_3'] = options_B[index].strip()
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_D[index]
-                    item['answer_1'] = options_C[index]
-                    item['answer_2'] = options_A[index]
+                    item['answer_3'] = options_D[index].strip()
+                    item['answer_1'] = options_C[index].strip()
+                    item['answer_2'] = options_A[index].strip()
                     item['right_answer'] = "C"
 
             yield item
@@ -174,7 +175,7 @@ class IndiaBixArrangeSpider(scrapy.Spider):
             difficulty_index = 0
             item = QuestionItem()
             item['_id'] = questions[index] +"\n" + re.sub(r'(\d{1})', r' \1', responses[index])
-            item['question_text'] = questions[index] +"\n" + re.sub(r'(\d{1})', r' \1', responses[index])
+            item['question_text'] = questions[index].strip() + re.sub(r'(\d{1})', r' \1', responses[index]).strip()
             item['answer_type'] = QuestionItem.ANSWER_TYPE_ARRANGE_THE_ORDER
             item['binary_file_path'] = None
             item['question_type'] = QuestionItem.QUESTION_TYPE_TEXT_BASED
@@ -193,70 +194,70 @@ class IndiaBixArrangeSpider(scrapy.Spider):
             if str(correct_answers[index]) == "A":
                 # item['right_answer'] = options_A[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_A[index]
-                    item['answer_2'] = options_B[index]
-                    item['answer_3'] = options_C[index]
+                    item['answer_1'] = options_A[index].strip()
+                    item['answer_2'] = options_B[index].strip()
+                    item['answer_3'] = options_C[index].strip()
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_A[index]
-                    item['answer_1'] = options_D[index]
-                    item['answer_3'] = options_B[index]
+                    item['answer_2'] = options_A[index].strip()
+                    item['answer_1'] = options_D[index].strip()
+                    item['answer_3'] = options_B[index].strip()
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_A[index]
-                    item['answer_1'] = options_C[index]
-                    item['answer_2'] = options_D[index]
+                    item['answer_3'] = options_A[index].strip()
+                    item['answer_1'] = options_C[index].strip()
+                    item['answer_2'] = options_D[index].strip()
                     item['right_answer'] = "C"
             elif str(correct_answers[index]) == "B":
                 # item['right_answer'] = options_B[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_B[index]
-                    item['answer_2'] = options_A[index]
-                    item['answer_3'] = options_C[index]
+                    item['answer_1'] = options_B[index].strip()
+                    item['answer_2'] = options_A[index].strip()
+                    item['answer_3'] = options_C[index].strip()
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_B[index]
-                    item['answer_1'] = options_D[index]
-                    item['answer_3'] = options_A[index]
+                    item['answer_2'] = options_B[index].strip()
+                    item['answer_1'] = options_D[index].strip()
+                    item['answer_3'] = options_A[index].strip()
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_B[index]
-                    item['answer_1'] = options_C[index]
-                    item['answer_2'] = options_D[index]
+                    item['answer_3'] = options_B[index].strip()
+                    item['answer_1'] = options_C[index].strip()
+                    item['answer_2'] = options_D[index].strip()
                     item['right_answer'] = "C"
             elif str(correct_answers[index]) == "C":
                 # item['right_answer'] = options_C[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_C[index]
-                    item['answer_2'] = options_B[index]
-                    item['answer_3'] = options_A[index]
+                    item['answer_1'] = options_C[index].strip()
+                    item['answer_2'] = options_B[index].strip()
+                    item['answer_3'] = options_A[index].strip()
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_C[index]
-                    item['answer_1'] = options_D[index]
-                    item['answer_3'] = options_B[index]
+                    item['answer_2'] = options_C[index].strip()
+                    item['answer_1'] = options_D[index].strip()
+                    item['answer_3'] = options_B[index].strip()
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_C[index]
-                    item['answer_1'] = options_A[index]
-                    item['answer_2'] = options_D[index]
+                    item['answer_3'] = options_C[index].strip()
+                    item['answer_1'] = options_A[index].strip()
+                    item['answer_2'] = options_D[index].strip()
                     item['right_answer'] = "C"
             else:
                 # item['right_answer'] = options_D[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_D[index]
-                    item['answer_2'] = options_B[index]
-                    item['answer_3'] = options_C[index]
+                    item['answer_1'] = options_D[index].strip()
+                    item['answer_2'] = options_B[index].strip()
+                    item['answer_3'] = options_C[index].strip()
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_D[index]
-                    item['answer_1'] = options_A[index]
-                    item['answer_3'] = options_B[index]
+                    item['answer_2'] = options_D[index].strip()
+                    item['answer_1'] = options_A[index].strip()
+                    item['answer_3'] = options_B[index].strip()
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_D[index]
-                    item['answer_1'] = options_C[index]
-                    item['answer_2'] = options_A[index]
+                    item['answer_3'] = options_D[index].strip()
+                    item['answer_1'] = options_C[index].strip()
+                    item['answer_2'] = options_A[index].strip()
                     item['right_answer'] = "C"
 
             yield item
