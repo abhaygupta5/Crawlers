@@ -12,7 +12,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
     myConf = YoutubePlaylistSpiderConfig(name)
     myConf.load_configs()
     start_urls = myConf.get_starting_urls()
-    questions_text = 'Identify the '
+    questions_text = 'Identify :  '
     url_index = -1
 
     VIDEO_START_TIME = myConf.get_video_start_time()  # youtube urls with start time after this many seconds
@@ -43,6 +43,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
             links = self.driver.find_elements_by_xpath(self.XPATH_LINKS)
             titles = self.driver.find_elements_by_xpath(self.XPATH_TITLES)
             category = self.driver.find_element_by_xpath(self.XPATH_CATEGORY).text
+            category = re.split('[|]',category)[0]
 
             titles = [re.split('[|-]', t.text)[0] for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
@@ -87,8 +88,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
             Wrapping into item container
 
             '''
-            correct_answer_index_list[i] = correct_answer_index_list[
-                                               i] + 1  # index starts with 0 here...changing it to start at 1
+
             question_item = QuestionItem()
 
             question_item['question_text'] = self.questions_text + category
@@ -97,7 +97,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
             question_item['answer_3'] = option_c_list[i]
             question_item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
             question_item['question_type'] = QuestionItem.QUESTION_TYPE_VIDEO_BASED
-            question_item['right_answer'] = correct_answer_index_list[i]
+            question_item['right_answer'] = chr(ord('A') + correct_answer_index_list[i])
             question_item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_EASY
             question_item['binary_file_path'] = links[i]
             question_item['category'] = category
