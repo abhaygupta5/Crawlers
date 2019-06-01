@@ -1,5 +1,5 @@
 from ..items import QuestionItem
-from ..WebsiteConfigurations import YoutubePlaylistSpiderConfig
+
 import scrapy
 import random
 import re
@@ -9,48 +9,28 @@ from selenium import webdriver
 
 class YoutubePlaylistSpider(scrapy.Spider):
     name = "YoutubePlaylistSpider"
-    myConf = YoutubePlaylistSpiderConfig(name)
-    myConf.load_configs()
-    start_urls = myConf.get_starting_urls()
-    questions_text = 'Identify :  '
+    start_urls = ['https://www.youtube.com/playlist?list=PL9oqVauEE2LIXtGYECl3wT1f5ae5EwDEZ']
+    path = "/Users/abhaygupta/Desktop/chromedriver"
 
-    VIDEO_START_TIME = myConf.get_video_start_time()  # youtube urls with start time after this many seconds
-
-    XPATH_LINKS = '//*[@id="content"]/a'
-    XPATH_TITLES = '//*[@id="video-title"]'
-    XPATH_CATEGORY = '//*[@id="title"]/yt-formatted-string/a'
-
-    def __init__(self):
-
-        # initialising selenium chrome driver with headless option
-        self.selenium_options = webdriver.ChromeOptions()
-        self.selenium_options.add_argument('headless')
-        self.driver = webdriver.Chrome(chrome_options=self.selenium_options)
-        #
 
     def parse(self, response):
-        print('Response :', response.url)
-
+        selenium_options = webdriver.ChromeOptions()
+        selenium_options.add_argument('headless')
+        driver = webdriver.Chrome(self.path, chrome_options=selenium_options)
 
         try:
-            self.driver.get(response.url)
-            links = self.driver.find_elements_by_xpath(self.XPATH_LINKS)
-            titles = self.driver.find_elements_by_xpath(self.XPATH_TITLES)
-            category = self.driver.find_element_by_xpath(self.XPATH_CATEGORY).text
-            category = re.split('[|]',category)[0]
+            driver.get(response.url)
+            links = driver.find_elements_by_xpath('//*[@id="content"]/a')
+            titles = driver.find_elements_by_xpath('//*[@id="video-title"]')
 
             titles = [re.split('[|-]', t.text)[0] for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
             links = [l.get_attribute('href') for l in links]
+            driver.close()
 
-            # changing start time of the urls
-            links = [l[:-2] + str(self.VIDEO_START_TIME) + 's' for l in links]
-            # print(links)
-            self.myConf.set_status(response.url, 'COMPLETED')
         except Exception, e:
             print('Error occured', e.message)
-            self.myConf.set_status(response.url, "ERROR : "+e.message)
-            self.driver.close()
+            driver.close()
 
         NUM_OF_SONGS = len(titles)
         option_a_list = titles
@@ -83,21 +63,23 @@ class YoutubePlaylistSpider(scrapy.Spider):
             Wrapping into item container
 
             '''
-
+            correct_answer_index_list[i] = correct_answer_index_list[
+                                               i] + 1  # index starts with 0 here...changing it to start at 1
             question_item = QuestionItem()
 
-            question_item['question_text'] = self.questions_text + category
+            question_item['question_text'] = 'Identify the song ?'
             question_item['answer_1'] = option_a_list[i]
             question_item['answer_2'] = option_b_list[i]
             question_item['answer_3'] = option_c_list[i]
             question_item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
             question_item['question_type'] = QuestionItem.QUESTION_TYPE_VIDEO_BASED
-            question_item['right_answer'] = chr(ord('A') + correct_answer_index_list[i])
+            if correct_answer_index_list[i] == 1:
+                question_item['right_answer'] = "A"
+            elif correct_answer_index_list[i] == 2:
+                question_item['right_answer'] = "B"
+            elif correct_answer_index_list[i] == 3:
+                question_item['right_answer'] = "C"
             question_item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_EASY
             question_item['binary_file_path'] = links[i]
-            question_item['category'] = category
 
             yield question_item
-
-    def __del__(self):
-        self.driver.close()
