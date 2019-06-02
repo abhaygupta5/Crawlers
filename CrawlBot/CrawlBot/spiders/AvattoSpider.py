@@ -5,42 +5,51 @@ import random
 import re
 import os
 
+from ..configurations import AvattoSpiderConf
+
 
 class AvattoSpider(scrapy.Spider):
     name = "AvattoSpider"
     base_url = "https://www.avatto.com/general-knowledge/questions/mcqs/kbc/answers/285/"
-    f = open(os.getcwd()+"/CrawlBot/spiders/url_avatto_single.txt", "r")
-    start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
-    f.close()
+    conf = AvattoSpiderConf(name).load_configs()
+    start_urls = conf.get_starting_urls()
+    # f = open(os.getcwd()+"/CrawlBot/spiders/url_avatto_single.txt", "r")
+    # start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
+    # f.close()
 
     def parse(self, response):
-        # question_numbers = len(response.css('.ques p::text').extract())
-        questions = response.css('.ques').xpath("string(./p)").extract()
-        options_A = response.css('tr:first_child td:nth-child(2) span p::text').extract()
-        options_B = response.css('tr:nth_child(2) td:nth-child(2) span p::text').extract()
-        options_C = response.css('tr:nth_child(3) td:nth-child(2) span p::text').extract()
-        options_D = response.css('tr:nth_child(4) td:nth-child(2) span p::text').extract()
 
-        # print(len(options_A), len(options_B), len(options_C), len(options_D))
-        # print()
-        # print(options_A)
-        # print(options_B)
-        # print(options_C)
-        # print(options_D)
-        correct_answers = []
-        list1 = response.css('.panel-new p:nth-child(1)::text').extract()
-        for i in range(len(response.css('.panel-new p:nth-child(1)::text').extract())):
-            if(i%2==0):
-                correct_answers.append(list1[i])
+        try:
+            # question_numbers = len(response.css('.ques p::text').extract())
+            questions = response.css('.ques').xpath("string(./p)").extract()
+            options_A = response.css('tr:first_child td:nth-child(2) span p::text').extract()
+            options_B = response.css('tr:nth_child(2) td:nth-child(2) span p::text').extract()
+            options_C = response.css('tr:nth_child(3) td:nth-child(2) span p::text').extract()
+            options_D = response.css('tr:nth_child(4) td:nth-child(2) span p::text').extract()
 
-        number_of_questions = len(response.css('.ques').xpath("string(./p)").extract())
-        number_of_easy_questions = math.floor(0.5 * number_of_questions)
-        number_of_medium_questions = math.ceil(0.3 * number_of_questions)
-        number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
-        index_of_easy = 0
-        index_of_medium = 0
-        index_of_hard = 0
+            # print(len(options_A), len(options_B), len(options_C), len(options_D))
+            # print()
+            # print(options_A)
+            # print(options_B)
+            # print(options_C)
+            # print(options_D)
+            correct_answers = []
+            list1 = response.css('.panel-new p:nth-child(1)::text').extract()
+            for i in range(len(response.css('.panel-new p:nth-child(1)::text').extract())):
+                if(i%2==0):
+                    correct_answers.append(list1[i])
 
+            number_of_questions = len(response.css('.ques').xpath("string(./p)").extract())
+            number_of_easy_questions = math.floor(0.5 * number_of_questions)
+            number_of_medium_questions = math.ceil(0.3 * number_of_questions)
+            number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
+            index_of_easy = 0
+            index_of_medium = 0
+            index_of_hard = 0
+
+            self.conf.set_status(response.url,'SUCCESS')
+        except Exception,e :
+            self.conf.set_status(response.url,'ERROR')
         # logic to filter
 
         for index in range(number_of_questions):

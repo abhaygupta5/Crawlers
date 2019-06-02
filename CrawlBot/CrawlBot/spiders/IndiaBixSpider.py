@@ -5,30 +5,38 @@ import random
 import re
 import os
 
+from ..configurations import IndiaBixSingleSpiderConfig,IndiaBixArrangeSpiderConfig
 
 class IndiaBixSingleSpider(scrapy.Spider):
     name = "IndiaBixSingleSpider"
     delimiter = ';'
-    f = open(os.getcwd()+"/CrawlBot/spiders/url_indiabix_single.txt", "r")
-    start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
-    f.close()
+    # f = open(os.getcwd()+"/CrawlBot/spiders/url_indiabix_single.txt", "r")
+    # start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
+    # f.close()
+
+    conf = IndiaBixSingleSpiderConfig(name).load_configs()
+    start_urls = conf.get_starting_urls()
 
     def parse(self, response):
-        question_numbers = response.css(".bix-td-qno::text").getall()
-        questions = response.css(".bix-td-qtxt").xpath("./p/text()").getall()
-        options_A = response.xpath("//*[@id[starts-with(.,'tdOptionDt_A')]]/text()").getall()
-        options_B = response.xpath("//*[@id[starts-with(.,'tdOptionDt_B')]]/text() | //*[@id='tdOptionDt_B_387']/i").getall()
-        options_C = response.xpath("//*[@id[starts-with(.,'tdOptionDt_C')]]/text()").getall()
-        options_D = response.xpath("//*[@id[starts-with(.,'tdOptionDt_D')]]/text()").getall()
+        try:
+            question_numbers = response.css(".bix-td-qno::text").getall()
+            questions = response.css(".bix-td-qtxt").xpath("./p/text()").getall()
+            options_A = response.xpath("//*[@id[starts-with(.,'tdOptionDt_A')]]/text()").getall()
+            options_B = response.xpath("//*[@id[starts-with(.,'tdOptionDt_B')]]/text() | //*[@id='tdOptionDt_B_387']/i").getall()
+            options_C = response.xpath("//*[@id[starts-with(.,'tdOptionDt_C')]]/text()").getall()
+            options_D = response.xpath("//*[@id[starts-with(.,'tdOptionDt_D')]]/text()").getall()
 
-        # print(len(options_A), len(options_B), len(options_C), len(options_D))
-        # print()
-        # print(options_A)
-        # print(options_B)
-        # print(options_C)
-        # print(options_D)
+            # print(len(options_A), len(options_B), len(options_C), len(options_D))
+            # print()
+            # print(options_A)
+            # print(options_B)
+            # print(options_C)
+            # print(options_D)
 
-        correct_answers = response.css(".jq-hdnakqb::text").getall()
+            correct_answers = response.css(".jq-hdnakqb::text").getall()
+            self.conf.set_status(response.url,'SUCCESS')
+        except Exception,e:
+            self.conf.set_status(response.url,'ERROR')
         number_of_questions = len(question_numbers)
         number_of_easy_questions = math.floor(0.5 * number_of_questions)
         number_of_medium_questions = math.ceil(0.3 * number_of_questions)
@@ -139,28 +147,37 @@ class IndiaBixSingleSpider(scrapy.Spider):
 class IndiaBixArrangeSpider(scrapy.Spider):
 
     name = "IndiaBixArrangeSpider"
-    f = open(os.getcwd()+"/CrawlBot/spiders/url_indiabix_arrange.txt", "r")
-    start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
-    f.close()
+    # f = open(os.getcwd()+"/CrawlBot/spiders/url_indiabix_arrange.txt", "r")
+    # start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
+    # f.close()
+
+    conf = IndiaBixArrangeSpiderConfig(name).load_configs()
+    start_urls = conf.get_starting_urls()
 
     def parse(self, response):
-        question_numbers = response.css(".bix-td-qno::text").getall()
-        questions = response.css(".bix-td-qtxt").xpath("./p[2]/text()").getall()
-        responses = response.css(".vr-tbl-lseq-question").xpath("string(./tbody)").getall()
-        if len(responses) == 0:
-            responses = response.css(".bix-td-qtxt").xpath("./p[3]/text()").getall()
-        options_A = response.xpath("//*[@id[starts-with(.,'tdOptionDt_A')]]/text()").getall()
-        options_B = response.xpath("//*[@id[starts-with(.,'tdOptionDt_B')]]/text() | //*[@id='tdOptionDt_B_387']/i").getall()
-        options_C = response.xpath("//*[@id[starts-with(.,'tdOptionDt_C')]]/text()").getall()
-        options_D = response.xpath("//*[@id[starts-with(.,'tdOptionDt_D')]]/text()").getall()
 
-        # print(len(options_A), len(options_B), len(options_C), len(options_D))
-        # print()
-        # print(questions)
-        # print()
-        # print(responses)
+        try:
+            question_numbers = response.css(".bix-td-qno::text").getall()
+            questions = response.css(".bix-td-qtxt").xpath("./p[2]/text()").getall()
+            responses = response.css(".vr-tbl-lseq-question").xpath("string(./tbody)").getall()
+            if len(responses) == 0:
+                responses = response.css(".bix-td-qtxt").xpath("./p[3]/text()").getall()
+            options_A = response.xpath("//*[@id[starts-with(.,'tdOptionDt_A')]]/text()").getall()
+            options_B = response.xpath("//*[@id[starts-with(.,'tdOptionDt_B')]]/text() | //*[@id='tdOptionDt_B_387']/i").getall()
+            options_C = response.xpath("//*[@id[starts-with(.,'tdOptionDt_C')]]/text()").getall()
+            options_D = response.xpath("//*[@id[starts-with(.,'tdOptionDt_D')]]/text()").getall()
 
-        correct_answers = response.css(".jq-hdnakqb::text").getall()
+            # print(len(options_A), len(options_B), len(options_C), len(options_D))
+            # print()
+            # print(questions)
+            # print()
+            # print(responses)
+
+            correct_answers = response.css(".jq-hdnakqb::text").getall()
+            self.conf.set_status(response.url, 'SUCCESS')
+        except Exception,e:
+            self.conf.set_status(response.url, 'ERROR')
+
         number_of_questions = len(question_numbers)
         number_of_easy_questions = math.floor(0.5 * number_of_questions)
         number_of_medium_questions = math.ceil(0.3 * number_of_questions)

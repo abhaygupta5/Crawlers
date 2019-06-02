@@ -4,29 +4,40 @@ import math
 import random
 import re
 import os
+from ..configurations import AudioQuizSpiderConf
 
 
 class AudioQuizSpider(scrapy.Spider):
     name = "AudioQuizSpider"
-    f = open(os.getcwd()+"/CrawlBot/spiders/url_audio_single.txt", "r")
-    start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
-    f.close()
+    # f = open(os.getcwd()+"/CrawlBot/spiders/url_audio_single.txt", "r")
+    # start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
+    # f.close()
+
+    conf = AudioQuizSpiderConf(name).load_configs()
+    start_urls = conf.get_starting_urls()
 
     def parse(self, response):
-        temp_ques = response.css('.style110::text').get()
-        list1 = list(temp_ques)
-        list1.remove('(')
-        list1.remove(')')
-        question = ''
-        for character in list1:
-            question += character
+        try:
+            temp_ques = response.css('.style110::text').get()
+            list1 = list(temp_ques)
+            list1.remove('(')
+            list1.remove(')')
+            question = ''
+            for character in list1:
+                question += character
 
-        audios = response.css('.style96').xpath('@href').extract()
-        correct_answers = response.css('.style96 font::text').extract()
-        number_of_questions = len(response.css('.style96 font::text').extract())
-        number_of_easy_questions = math.floor(0.5 * number_of_questions)
-        number_of_medium_questions = math.ceil(0.3 * number_of_questions)
-        number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
+            audios = response.css('.style96').xpath('@href').extract()
+            correct_answers = response.css('.style96 font::text').extract()
+            number_of_questions = len(response.css('.style96 font::text').extract())
+            number_of_easy_questions = math.floor(0.5 * number_of_questions)
+            number_of_medium_questions = math.ceil(0.3 * number_of_questions)
+            number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
+
+            self.conf.set_status(response.url,'SUCCESS')
+        except Exception,e:
+            self.conf.set_status(response.url,'ERROR')
+
+
         index_of_easy = 0
         index_of_medium = 0
         index_of_hard = 0

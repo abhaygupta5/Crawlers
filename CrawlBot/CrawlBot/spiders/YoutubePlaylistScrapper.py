@@ -1,5 +1,5 @@
 from ..items import QuestionItem
-
+from ..configurations import YoutubePlaylistSpiderConfig
 import scrapy
 import random
 import re
@@ -9,30 +9,33 @@ from selenium import webdriver
 
 class YoutubePlaylistSpider(scrapy.Spider):
     name = "YoutubePlaylistSpider"
-    start_urls = ['https://www.youtube.com/playlist?list=PL9oqVauEE2LIXtGYECl3wT1f5ae5EwDEZ']
-    path = "/Users/abhaygupta/Desktop/chromedriver"
-
+    conf = YoutubePlaylistSpiderConfig(name).load_configs()
+    start_urls = conf.get_starting_urls()
+    path = 'chromedriver'
 
     def parse(self, response):
         selenium_options = webdriver.ChromeOptions()
         selenium_options.add_argument('headless')
-        driver = webdriver.Chrome(self.path, chrome_options=selenium_options)
+        driver = webdriver.Chrome(executable_path=self.path, chrome_options=selenium_options)
 
         try:
             driver.get(response.url)
+            self.conf.set_status(response.url, 'STARTED')
             links = driver.find_elements_by_xpath('//*[@id="content"]/a')
             titles = driver.find_elements_by_xpath('//*[@id="video-title"]')
 
             titles = [re.split('[|-]', t.text)[0] for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
             links = [l.get_attribute('href') for l in links]
+            self.conf.set_status(response.url, 'SUCCESS')
             driver.close()
 
         except Exception, e:
             print('Error occured', e.message)
+            self.conf.set_status(response.url, 'ERROR ' + e.message)
             driver.close()
 
-        NUM_OF_SONGS = len(titles)
+        num_of_songs = len(titles)
         option_a_list = titles
         option_b_list = titles[1:] + titles[:1]
         option_c_list = titles[2:] + titles[:2]
@@ -41,9 +44,9 @@ class YoutubePlaylistSpider(scrapy.Spider):
         print(option_b_list)
         print(option_c_list)
 
-        correct_answer_index_list = [0 for i in range(NUM_OF_SONGS)]
+        correct_answer_index_list = [0 for i in range(num_of_songs)]
 
-        for i in range(NUM_OF_SONGS):
+        for i in range(num_of_songs):
 
             '''
             shuffling the answers keeping track of the correct answer in the correct_answer_index_list
