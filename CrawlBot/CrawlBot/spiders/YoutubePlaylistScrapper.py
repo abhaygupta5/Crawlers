@@ -14,6 +14,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
     path = 'chromedriver'
     XPATH_LINKS = '//*[@id="content"]/a'
     XPATH_TITLES = '//*[@id="video-title"]'
+    XPATH_CATEGORY = '//*[(@id = "title")]//*[contains(concat( " ", @class, " " ), concat( " ", "yt-formatted-string", " " ))]'
 
     def parse(self, response):
         selenium_options = webdriver.ChromeOptions()
@@ -25,8 +26,11 @@ class YoutubePlaylistSpider(scrapy.Spider):
             self.conf.set_status(response.url, 'STARTED')
             links = driver.find_elements_by_xpath(self.XPATH_LINKS)
             titles = driver.find_elements_by_xpath(self.XPATH_TITLES)
+            category = driver.find_element_by_xpath(self.XPATH_CATEGORY).text
+            category = re.split('[|]',category)[0]
 
             titles = [re.split('[|-]', t.text)[0] for t in titles]
+            titles = [t.replace('"', '') for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
             links = [l.get_attribute('href') for l in links]
             self.conf.set_status(response.url, 'SUCCESS')
@@ -71,7 +75,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
 
             question_item = QuestionItem()
 
-            question_item['question_text'] = 'Identify the song ?'
+            question_item['question_text'] = 'Identify : ' + category
             question_item['answer_1'] = option_a_list[i]
             question_item['answer_2'] = option_b_list[i]
             question_item['answer_3'] = option_c_list[i]
