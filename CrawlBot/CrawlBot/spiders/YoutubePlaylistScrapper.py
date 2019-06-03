@@ -16,25 +16,39 @@ class YoutubePlaylistSpider(scrapy.Spider):
     XPATH_TITLES = '//*[@id="video-title"]'
     XPATH_CATEGORY = '//*[(@id = "title")]//*[contains(concat( " ", @class, " " ), concat( " ", "yt-formatted-string", " " ))]'
 
+
+    default_difficulty_level = ''
+    default_category = ''
+    default_question_type = ''
+    default_answer_type = ''
+
     def parse(self, response):
         selenium_options = webdriver.ChromeOptions()
         selenium_options.add_argument('headless')
         driver = webdriver.Chrome(executable_path=self.path, chrome_options=selenium_options)
 
         try:
+            difficulty_level = self.conf.get_difficulty_level(response.url, self.default_difficulty_level)
+            category = self.conf.get_category(response.url, self.default_category)
+            question_type = self.conf.get_question_type(response.url, self.default_question_type)
+            answer_type = self.conf.get_answer_type(response.url, self.default_answer_type)
+
+            self.default_difficulty_level = difficulty_level
+            self.default_category = category
+            self.default_question_type = question_type
+            self.default_answer_type = answer_type
+
             driver.get(response.url)
             self.conf.set_status(response.url, 'STARTED')
             links = driver.find_elements_by_xpath(self.XPATH_LINKS)
             titles = driver.find_elements_by_xpath(self.XPATH_TITLES)
             category = driver.find_element_by_xpath(self.XPATH_CATEGORY).text
-            category = re.split('[|]',category)[0]
+            category = re.split('[|]', category)[0]
 
             titles = [re.split('[|-]', t.text)[0] for t in titles]
             titles = [t.replace('"', '') for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
             links = [l.get_attribute('href') for l in links]
-
-            difficulty_level = self.conf.get_difficulty_level(response.url)
 
             self.conf.set_status(response.url, 'SUCCESS')
             driver.close()
@@ -82,10 +96,13 @@ class YoutubePlaylistSpider(scrapy.Spider):
             question_item['answer_1'] = option_a_list[i]
             question_item['answer_2'] = option_b_list[i]
             question_item['answer_3'] = option_c_list[i]
-            question_item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
-            question_item['question_type'] = QuestionItem.QUESTION_TYPE_VIDEO_BASED
+
             question_item['right_answer'] = chr(ord('A') + correct_answer_index_list[i])
-            question_item['difficulty_level'] = difficulty_level
             question_item['binary_file_path'] = links[i]
+
+            question_item['question_type'] = question_type
+            question_item['answer_type'] = answer_type
+            question_item['difficulty_level'] = difficulty_level
+            question_item['category'] = category
 
             yield question_item

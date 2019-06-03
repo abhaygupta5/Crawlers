@@ -16,14 +16,26 @@ class JetpunkSpider(scrapy.Spider):
     base_url = "https://www.jetpunk.com"
     conf = JetpunkSpiderConf(name).load_configs()
     start_urls = conf.get_starting_urls()
-    # f = open(os.getcwd()+"/CrawlBot/spiders/url_jetpunk_images.txt", "r")
-    # start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
-    # f.close()
     path = "chromedriver"
+
+    default_difficulty_level = ''
+    default_category = ''
+    default_question_type = ''
+    default_answer_type = ''
 
     def parse(self, response):
 
         try:
+            difficulty_level = self.conf.get_difficulty_level(response.url, self.default_difficulty_level)
+            category = self.conf.get_category(response.url, self.default_category)
+            question_type = self.conf.get_question_type(response.url, self.default_question_type)
+            answer_type = self.conf.get_answer_type(response.url, self.default_answer_type)
+
+            self.default_difficulty_level = difficulty_level
+            self.default_category = category
+            self.default_question_type = question_type
+            self.default_answer_type = answer_type
+
             selenium_options = webdriver.ChromeOptions()
             selenium_options.add_argument('headless')
             driver = webdriver.Chrome(self.path, chrome_options=selenium_options)
@@ -32,6 +44,7 @@ class JetpunkSpider(scrapy.Spider):
             take_quiz = driver.find_element_by_xpath('//*[(@id = "start-button")]')
             take_quiz.click()
 
+            number_of_questions = 0
             give_up = driver.find_element_by_xpath(
                 '//*[contains(concat( " ", @class, " " ), concat( " ", "link-like", " " ))]')
             give_up.click()
@@ -45,7 +58,7 @@ class JetpunkSpider(scrapy.Spider):
             print(page.css('title::text').extract())
 
             number_of_questions = len(page.css(".photo-img").xpath('@src').extract())
-            print("number_of_questions ", number_of_questions)
+            # print("number_of_questions ", number_of_questions)
 
             question = response.css(".instructions::text").get()
 
@@ -66,15 +79,9 @@ class JetpunkSpider(scrapy.Spider):
             driver.close()
             self.conf.set_status(response.url,'SUCCESS')
         except Exception,e :
+            number_of_questions = 0
             self.conf.set_status(response.url,'ERROR '+e.message)
             driver.close()
-
-        # number_of_easy_questions = math.floor(0.5 * number_of_questions)
-        # number_of_medium_questions = math.ceil(0.3 * number_of_questions)
-        # number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
-        # index_of_easy = 0
-        # index_of_medium = 0
-        # index_of_hard = 0
 
         # logic to filter
 
@@ -82,37 +89,19 @@ class JetpunkSpider(scrapy.Spider):
             difficulty_index = 0
             item = QuestionItem()
             item['question_text'] = question.strip()
-            item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
             item['binary_file_path'] = self.base_url + images[index]
-            item['question_type'] = QuestionItem.QUESTION_TYPE_IMAGE_BASED
             item['_id'] = question+str(index)+images[index]
-            item['difficulty_level'] = difficulty_level
 
-            # if index_of_easy < number_of_easy_questions:
-            #     index_of_easy += 1
-            # elif index_of_medium < number_of_medium_questions:
-            #     index_of_medium += 1
-            # else:
-            #     index_of_hard += 1
+            item['question_type'] = question_type
+            item['answer_type'] = answer_type
+            item['difficulty_level'] = difficulty_level
+            item['category'] = category
 
             random_correct_index = random.choice([1, 2, 3])
 
             right_answer = correct_answers[index]
-            # item['right_answer'] = right_answer
             valid_answers = correct_answers[:]
             valid_answers.remove(right_answer)
-
-            # incorrect_answers = []
-            # num = random.randint(0, len(valid_answers))
-            # print("RANDOM CHOSEN ", num)
-            # incorrect_answers.append(num)
-            #
-            # num1 = random.randint(0, len(valid_answers))
-            # while num1 == num:
-            #     num1 = random.randint(0, len(valid_answers))
-            # print("RANDOM CHOSEN 2 ", num1)
-            # incorrect_answers.append(num1)
-            # print("INCORRECT ", incorrect_answers)
 
             incorrect_answers = random.sample(valid_answers,2)
 
@@ -131,22 +120,6 @@ class JetpunkSpider(scrapy.Spider):
                 item['answer_3'] = right_answer
                 item['answer_1'] = incorrect_answers[0]
                 item['answer_2'] = incorrect_answers[1]
-
-            # if random_correct_index == 1:
-            #     item['right_answer'] = 'A'
-            #     item['answer_1'] = right_answer
-            #     item['answer_2'] = correct_answers[incorrect_answers[0]]
-            #     item['answer_3'] = correct_answers[incorrect_answers[1]]
-            # elif random_correct_index == 2:
-            #     item['right_answer'] = 'B'
-            #     item['answer_2'] = right_answer
-            #     item['answer_1'] = correct_answers[incorrect_answers[0]]
-            #     item['answer_3'] = correct_answers[incorrect_answers[1]]
-            # else:
-            #     item['right_answer'] = 'C'
-            #     item['answer_3'] = right_answer
-            #     item['answer_1'] = correct_answers[incorrect_answers[0]]
-            #     item['answer_2'] = correct_answers[incorrect_answers[1]]
 
             print("ITEM", item)
             yield item

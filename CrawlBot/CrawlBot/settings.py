@@ -94,7 +94,8 @@ FEED_EXPORTERS = {
     'csv': 'CrawlBot.custom_csv_class.MyProjectCsvItemExporter',
 }
 FIELDS_TO_EXPORT = [
-    "question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path"
+    "question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path",
+    "category"
 ]
 CSV_DELIMITER = ";"
 

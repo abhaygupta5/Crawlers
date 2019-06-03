@@ -6,6 +6,7 @@ from items import QuestionItem
 class SpiderConfig(object):
     DATABASE_NAME = 'IndiaBix'
     CONFIGURATION_COLLECTION_NAME = 'configuration'
+    DEFAULT_DIFFICULTY = ''
 
     def __init__(self, spider_name):
         self.conn = pymongo.MongoClient(
@@ -19,6 +20,7 @@ class SpiderConfig(object):
         self.difficulty_level = {}
         self.question_type = {}
         self.answer_type = {}
+        self.category = {}
 
     def save_initial_data(self):
         pass
@@ -35,9 +37,15 @@ class SpiderConfig(object):
             self.difficulty_level[web_obj['url']] = web_obj['difficulty_level']
             self.question_type[web_obj['url']] = web_obj['question_type']
             self.answer_type[web_obj['url']] = web_obj['answer_type']
+            self.category[web_obj['url']] = web_obj['category']
             if web_obj['enable_crawling']:
                 self.starting_urls.append(web_obj['url'])
         return self
+
+    def get_category(self,url,default):
+        if url in self.category:
+            return self.category[url]
+        return default
 
     def get_num_of_threads(self):
         return self.num_of_threads
@@ -48,14 +56,20 @@ class SpiderConfig(object):
     def get_starting_urls(self):
         return self.starting_urls
 
-    def get_difficulty_level(self, url):
-        return self.difficulty_level[url]
+    def get_difficulty_level(self, url,default):
+        if url in self.difficulty_level:
+            return self.difficulty_level[url]
+        return default
 
-    def get_question_type(self, url):
-        return self.question_type[url]
+    def get_question_type(self, url, default):
+        if url in self.question_type:
+            return self.question_type[url]
+        return default
 
-    def get_answer_type(self, url):
-        return self.answer_type[url]
+    def get_answer_type(self, url,default):
+        if url in self.answer_type:
+            return self.answer_type[url]
+        return default
 
     def get_csv_file_name(self):
         return self.csv_file_name
