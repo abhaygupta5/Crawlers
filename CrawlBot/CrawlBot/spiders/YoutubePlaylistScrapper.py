@@ -12,6 +12,8 @@ class YoutubePlaylistSpider(scrapy.Spider):
     conf = YoutubePlaylistSpiderConfig(name).load_configs()
     start_urls = conf.get_starting_urls()
     path = 'chromedriver'
+    XPATH_LINKS = '//*[@id="content"]/a'
+    XPATH_TITLES = '//*[@id="video-title"]'
 
     def parse(self, response):
         selenium_options = webdriver.ChromeOptions()
@@ -21,8 +23,8 @@ class YoutubePlaylistSpider(scrapy.Spider):
         try:
             driver.get(response.url)
             self.conf.set_status(response.url, 'STARTED')
-            links = driver.find_elements_by_xpath('//*[@id="content"]/a')
-            titles = driver.find_elements_by_xpath('//*[@id="video-title"]')
+            links = driver.find_elements_by_xpath(self.XPATH_LINKS)
+            titles = driver.find_elements_by_xpath(self.XPATH_TITLES)
 
             titles = [re.split('[|-]', t.text)[0] for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
