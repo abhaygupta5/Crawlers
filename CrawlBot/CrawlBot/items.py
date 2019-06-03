@@ -26,10 +26,10 @@ class QuestionItem(scrapy.Item):
     ANSWER_TYPE_MULTI_CORRECT = 'Multi-Correct'
     ANSWER_TYPE_ARRANGE_THE_ORDER = 'Arrange the order'
 
-    QUESTION_TYPE_TEXT_BASED = 'Text Based'
-    QUESTION_TYPE_IMAGE_BASED = 'Image Based'
-    QUESTION_TYPE_AUDIO_BASED = 'Audio Based'
-    QUESTION_TYPE_VIDEO_BASED = 'Video Based'
+    QUESTION_TYPE_TEXT_BASED = 'Text-Based'
+    QUESTION_TYPE_IMAGE_BASED = 'Image-Based'
+    QUESTION_TYPE_AUDIO_BASED = 'Audio-Based'
+    QUESTION_TYPE_VIDEO_BASED = 'Video-Based'
 
     DIFFICULTY_LEVEL_EASY = 'Easy'
     DIFFICULTY_LEVEL_AVERAGE = 'Medium'

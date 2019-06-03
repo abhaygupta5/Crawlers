@@ -72,13 +72,13 @@ class AudioQuizSpider(scrapy.Spider):
             num = random.randint(0, len(valid_answers))
             print("RANDOM CHOSEN ", num)
             incorrect_answers.append(num)
-            valid_answers.remove(valid_answers[num])
 
-            num = random.randint(0, len(valid_answers))
-            print("RANDOM CHOSEN 2 ", num)
-            incorrect_answers.append(num)
+            num1 = random.randint(0, len(valid_answers))
+            while num1 == num:
+                num1 = random.randint(0, len(valid_answers))
+            print("RANDOM CHOSEN 2 ", num1)
+            incorrect_answers.append(num1)
             print("INCORRECT ", incorrect_answers)
-            # print("incorrect_answers ",incorrect_answers)
 
             if random_correct_index == 1:
                 item['right_answer'] = 'A'
@@ -124,6 +124,11 @@ class MovieThemeSpider(scrapy.Spider):
             number_of_easy_questions = math.floor(0.5 * number_of_questions)
             number_of_medium_questions = math.ceil(0.3 * number_of_questions)
             number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
+
+            print('nm of questions ', number_of_questions)
+            print('corr ', len(correct_answers))
+
+
             index_of_easy = 0
             index_of_medium = 0
             index_of_hard = 0
@@ -159,17 +164,21 @@ class MovieThemeSpider(scrapy.Spider):
             # item['right_answer'] = right_answer
             valid_answers = correct_answers[:]
             valid_answers.remove(right_answer)
+            print("Valid answers: ", len(valid_answers))
+            print("Correct Answers: ", len(correct_answers))
 
             incorrect_answers = []
             num = random.randint(0, len(valid_answers))
             print("RANDOM CHOSEN ", num)
             incorrect_answers.append(num)
-            valid_answers.remove(valid_answers[num])
 
-            num = random.randint(0, len(valid_answers))
-            print("RANDOM CHOSEN 2 ", num)
-            incorrect_answers.append(num)
+            num1 = random.randint(0, len(valid_answers))
+            while num1 == num:
+                num1 = random.randint(0, len(valid_answers))
+            print("RANDOM CHOSEN 2 ", num1)
+            incorrect_answers.append(num1)
             print("INCORRECT ", incorrect_answers)
+
             # print("incorrect_answers ",incorrect_answers)
 
             if random_correct_index == 1:
