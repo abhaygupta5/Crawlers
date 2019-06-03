@@ -68,8 +68,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
             Wrapping into item container
 
             '''
-            correct_answer_index_list[i] = correct_answer_index_list[
-                                               i] + 1  # index starts with 0 here...changing it to start at 1
+
             question_item = QuestionItem()
 
             question_item['question_text'] = 'Identify the song ?'
@@ -78,12 +77,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
             question_item['answer_3'] = option_c_list[i]
             question_item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
             question_item['question_type'] = QuestionItem.QUESTION_TYPE_VIDEO_BASED
-            if correct_answer_index_list[i] == 1:
-                question_item['right_answer'] = "A"
-            elif correct_answer_index_list[i] == 2:
-                question_item['right_answer'] = "B"
-            elif correct_answer_index_list[i] == 3:
-                question_item['right_answer'] = "C"
+            question_item['right_answer'] = chr(ord('A') + correct_answer_index_list[i])
             question_item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_EASY
             question_item['binary_file_path'] = links[i]
 
