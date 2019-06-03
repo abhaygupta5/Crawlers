@@ -233,7 +233,13 @@ class AvattoSpiderConf(SpiderConfig):
             'web_pages': [
 
                 {
-                    'url': 'https://www.avatto.com/general-knowledge/questions/mcqs/kbc/answers/285/',
+                    'url': 'https://www.avatto.com/general-knowledge/questions/mcqs/kbc/answers/285/1.html',
+                    'enable_crawling': True,
+                    'category': '',
+                    'status': 'NOT STARTED'
+                },
+                {
+                    'url': 'https://www.avatto.com/general-knowledge/questions/mcqs/countries/answers/282/1.html',
                     'enable_crawling': True,
                     'category': '',
                     'status': 'NOT STARTED'
@@ -258,7 +264,7 @@ class AudioQuizSpiderConf(SpiderConfig):
             'web_pages': [
 
                 {
-                    'url': 'https://www.avatto.com/general-knowledge/questions/mcqs/kbc/answers/285/',
+                    'url': 'https://www.quizmasters.biz/DB/Audio/National%20Anthems/National%20Anthems.html',
                     'enable_crawling': True,
                     'category': '',
                     'status': 'NOT STARTED'
