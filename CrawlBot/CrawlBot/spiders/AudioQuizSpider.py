@@ -4,7 +4,7 @@ import math
 import random
 import re
 import os
-from ..configurations import AudioQuizSpiderConf
+from ..configurations import AudioQuizSpiderConf,MovieThemeSpiderConf
 
 
 class AudioQuizSpider(scrapy.Spider):
@@ -33,10 +33,9 @@ class AudioQuizSpider(scrapy.Spider):
             number_of_medium_questions = math.ceil(0.3 * number_of_questions)
             number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
 
-            self.conf.set_status(response.url,'SUCCESS')
-        except Exception,e:
-            self.conf.set_status(response.url,'ERROR')
-
+            self.conf.set_status(response.url, 'SUCCESS')
+        except Exception, e:
+            self.conf.set_status(response.url, 'ERROR')
 
         index_of_easy = 0
         index_of_medium = 0
@@ -62,15 +61,115 @@ class AudioQuizSpider(scrapy.Spider):
                 item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_HARD
                 index_of_hard += 1
 
-            random_correct_index = random.choice([1,2,3])
-
+            random_correct_index = random.choice([1, 2, 3])
 
             right_answer = correct_answers[index]
             # item['right_answer'] = right_answer
             valid_answers = correct_answers[:]
             valid_answers.remove(right_answer)
 
-            incorrect_answers = random.sample(range(0, len(valid_answers)), 2)
+            incorrect_answers = []
+            num = random.randint(0, len(valid_answers))
+            print("RANDOM CHOSEN ", num)
+            incorrect_answers.append(num)
+            valid_answers.remove(valid_answers[num])
+
+            num = random.randint(0, len(valid_answers))
+            print("RANDOM CHOSEN 2 ", num)
+            incorrect_answers.append(num)
+            print("INCORRECT ", incorrect_answers)
+            # print("incorrect_answers ",incorrect_answers)
+
+            if random_correct_index == 1:
+                item['right_answer'] = 'A'
+                item['answer_1'] = right_answer
+                item['answer_2'] = correct_answers[incorrect_answers[0]]
+                item['answer_3'] = correct_answers[incorrect_answers[1]]
+            elif random_correct_index == 2:
+                item['right_answer'] = 'B'
+                item['answer_2'] = right_answer
+                item['answer_1'] = correct_answers[incorrect_answers[0]]
+                item['answer_3'] = correct_answers[incorrect_answers[1]]
+            else:
+                item['right_answer'] = 'C'
+                item['answer_3'] = right_answer
+                item['answer_1'] = correct_answers[incorrect_answers[0]]
+                item['answer_2'] = correct_answers[incorrect_answers[1]]
+
+            print("ITEM", item)
+            yield item
+
+        # nextPage = response.css('.mx-pager').xpath('./a[last()]/@href').get()
+        # if nextPage is not None:
+        #     nextPage = response.urljoin(nextPage)
+        #     yield scrapy.Request(nextPage, callback=self.parse)
+
+
+class MovieThemeSpider(scrapy.Spider):
+    name = "MovieThemeSpider"
+    # f = open(os.getcwd()+"/CrawlBot/spiders/url_audio_single.txt", "r")
+    conf = MovieThemeSpiderConf(name).load_configs()
+
+
+    start_urls = conf.get_starting_urls()
+
+    def parse(self, response):
+
+        try:
+            question = response.css('.style112::text').get()
+
+            audios = response.css('.style75 a').xpath('@href').extract()
+            correct_answers = response.css('.style75 a font::text').extract()
+            number_of_questions = len(response.css('.style75 a font::text').extract())
+            number_of_easy_questions = math.floor(0.5 * number_of_questions)
+            number_of_medium_questions = math.ceil(0.3 * number_of_questions)
+            number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
+            index_of_easy = 0
+            index_of_medium = 0
+            index_of_hard = 0
+            self.conf.set_status(response.url,'SUCCESS')
+        except Exception,e:
+            self.conf.set_status(response.url,'ERROR '+e.message)
+
+
+
+        # logic to filter
+
+        for index in range(number_of_questions):
+            difficulty_index = 0
+            item = QuestionItem()
+            item['_id'] = question + str(index)
+            item['question_text'] = question.strip()
+            item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
+            item['binary_file_path'] = response.urljoin(audios[index])
+            item['question_type'] = QuestionItem.QUESTION_TYPE_AUDIO_BASED
+            if index_of_easy < number_of_easy_questions:
+                item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_EASY
+                index_of_easy += 1
+            elif index_of_medium < number_of_medium_questions:
+                item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_AVERAGE
+                index_of_medium += 1
+            else:
+                item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_HARD
+                index_of_hard += 1
+
+            random_correct_index = random.choice([1, 2, 3])
+
+            right_answer = correct_answers[index]
+            # item['right_answer'] = right_answer
+            valid_answers = correct_answers[:]
+            valid_answers.remove(right_answer)
+
+            incorrect_answers = []
+            num = random.randint(0, len(valid_answers))
+            print("RANDOM CHOSEN ", num)
+            incorrect_answers.append(num)
+            valid_answers.remove(valid_answers[num])
+
+            num = random.randint(0, len(valid_answers))
+            print("RANDOM CHOSEN 2 ", num)
+            incorrect_answers.append(num)
+            print("INCORRECT ", incorrect_answers)
             # print("incorrect_answers ",incorrect_answers)
 
             if random_correct_index == 1:

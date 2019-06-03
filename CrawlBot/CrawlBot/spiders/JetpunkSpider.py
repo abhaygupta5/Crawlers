@@ -102,7 +102,16 @@ class JetpunkSpider(scrapy.Spider):
             valid_answers = correct_answers[:]
             valid_answers.remove(right_answer)
 
-            incorrect_answers = random.sample(range(0, len(valid_answers)), 2)
+            incorrect_answers = []
+            num = random.randint(0, len(valid_answers))
+            print("RANDOM CHOSEN ", num)
+            incorrect_answers.append(num)
+            valid_answers.remove(valid_answers[num])
+
+            num = random.randint(0, len(valid_answers))
+            print("RANDOM CHOSEN 2 ", num)
+            incorrect_answers.append(num)
+            print("INCORRECT ", incorrect_answers)
             # print("incorrect_answers ",incorrect_answers)
 
             if random_correct_index == 1:

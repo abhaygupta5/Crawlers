@@ -277,6 +277,32 @@ class AudioQuizSpiderConf(SpiderConfig):
         self.collection.update({'_id': self.spider_name}, dict(data), upsert=True)
 
 
+class MovieThemeSpiderConf(SpiderConfig):
+
+    def __init__(self, spider_name):
+        super(MovieThemeSpiderConf, self).__init__(spider_name)
+
+    def save_initial_data(self):
+        # self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
+        data = {
+            'spider_name': self.spider_name,
+            'web_pages': [
+
+                {
+                    'url': 'https://www.quizmasters.biz/DB/Audio/Movie%20Themes/Movie%20Themes.html',
+                    'enable_crawling': True,
+                    'category': '',
+                    'status': 'NOT STARTED'
+                }
+
+            ]
+
+        }
+
+        self.collection.update({'_id': self.spider_name}, dict(data), upsert=True)
+
+
+
 if __name__ == '__main__':
 
     '''
@@ -286,7 +312,7 @@ if __name__ == '__main__':
 
     confs = [IndiaBixArrangeSpiderConfig('IndiaBixArrangeSpider'), IndiaBixSingleSpiderConfig('IndiaBixSingleSpider'),
              YoutubePlaylistSpiderConfig('YoutubePlaylistSpider'), JetpunkSpiderConf('JetpunkSpider'),
-             AvattoSpiderConf('AvattoSpider'), AudioQuizSpiderConf('AudioQuizSpider')]
+             AvattoSpiderConf('AvattoSpider'), AudioQuizSpiderConf('AudioQuizSpider'), MovieThemeSpiderConf('MovieThemeSpider')]
 
     for conf in confs:
         conf.save_initial_data()
