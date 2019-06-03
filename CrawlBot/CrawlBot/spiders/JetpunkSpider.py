@@ -102,33 +102,51 @@ class JetpunkSpider(scrapy.Spider):
             valid_answers = correct_answers[:]
             valid_answers.remove(right_answer)
 
-            incorrect_answers = []
-            num = random.randint(0, len(valid_answers))
-            print("RANDOM CHOSEN ", num)
-            incorrect_answers.append(num)
+            # incorrect_answers = []
+            # num = random.randint(0, len(valid_answers))
+            # print("RANDOM CHOSEN ", num)
+            # incorrect_answers.append(num)
+            #
+            # num1 = random.randint(0, len(valid_answers))
+            # while num1 == num:
+            #     num1 = random.randint(0, len(valid_answers))
+            # print("RANDOM CHOSEN 2 ", num1)
+            # incorrect_answers.append(num1)
+            # print("INCORRECT ", incorrect_answers)
 
-            num1 = random.randint(0, len(valid_answers))
-            while num1 == num:
-                num1 = random.randint(0, len(valid_answers))
-            print("RANDOM CHOSEN 2 ", num1)
-            incorrect_answers.append(num1)
-            print("INCORRECT ", incorrect_answers)
+            incorrect_answers = random.sample(valid_answers,2)
 
             if random_correct_index == 1:
                 item['right_answer'] = 'A'
                 item['answer_1'] = right_answer
-                item['answer_2'] = correct_answers[incorrect_answers[0]]
-                item['answer_3'] = correct_answers[incorrect_answers[1]]
+                item['answer_2'] = incorrect_answers[0]
+                item['answer_3'] = incorrect_answers[1]
             elif random_correct_index == 2:
                 item['right_answer'] = 'B'
                 item['answer_2'] = right_answer
-                item['answer_1'] = correct_answers[incorrect_answers[0]]
-                item['answer_3'] = correct_answers[incorrect_answers[1]]
+                item['answer_1'] = incorrect_answers[0]
+                item['answer_3'] = incorrect_answers[1]
             else:
                 item['right_answer'] = 'C'
                 item['answer_3'] = right_answer
-                item['answer_1'] = correct_answers[incorrect_answers[0]]
-                item['answer_2'] = correct_answers[incorrect_answers[1]]
+                item['answer_1'] = incorrect_answers[0]
+                item['answer_2'] = incorrect_answers[1]
+
+            # if random_correct_index == 1:
+            #     item['right_answer'] = 'A'
+            #     item['answer_1'] = right_answer
+            #     item['answer_2'] = correct_answers[incorrect_answers[0]]
+            #     item['answer_3'] = correct_answers[incorrect_answers[1]]
+            # elif random_correct_index == 2:
+            #     item['right_answer'] = 'B'
+            #     item['answer_2'] = right_answer
+            #     item['answer_1'] = correct_answers[incorrect_answers[0]]
+            #     item['answer_3'] = correct_answers[incorrect_answers[1]]
+            # else:
+            #     item['right_answer'] = 'C'
+            #     item['answer_3'] = right_answer
+            #     item['answer_1'] = correct_answers[incorrect_answers[0]]
+            #     item['answer_2'] = correct_answers[incorrect_answers[1]]
 
             print("ITEM", item)
             yield item

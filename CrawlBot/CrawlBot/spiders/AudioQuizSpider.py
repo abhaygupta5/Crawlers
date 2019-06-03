@@ -9,10 +9,6 @@ from ..configurations import AudioQuizSpiderConf,MovieThemeSpiderConf
 
 class AudioQuizSpider(scrapy.Spider):
     name = "AudioQuizSpider"
-    # f = open(os.getcwd()+"/CrawlBot/spiders/url_audio_single.txt", "r")
-    # start_urls = [url.split(" ")[0].strip() for url in f.readlines() if int(url.split(" ")[1]) != 0]
-    # f.close()
-
     conf = AudioQuizSpiderConf(name).load_configs()
     start_urls = conf.get_starting_urls()
 
@@ -64,37 +60,54 @@ class AudioQuizSpider(scrapy.Spider):
             random_correct_index = random.choice([1, 2, 3])
 
             right_answer = correct_answers[index]
-            # item['right_answer'] = right_answer
             valid_answers = correct_answers[:]
             valid_answers.remove(right_answer)
+            #
+            # incorrect_answers = []
+            # num = random.randint(0, len(valid_answers))
+            # print("RANDOM CHOSEN ", num)
+            # incorrect_answers.append(num)
+            #
+            # num1 = random.randint(0, len(valid_answers))
+            # while num1 == num:
+            #     num1 = random.randint(0, len(valid_answers))
+            # print("RANDOM CHOSEN 2 ", num1)
+            # incorrect_answers.append(num1)
+            # print("INCORRECT ", incorrect_answers)
 
-            incorrect_answers = []
-            num = random.randint(0, len(valid_answers))
-            print("RANDOM CHOSEN ", num)
-            incorrect_answers.append(num)
-
-            num1 = random.randint(0, len(valid_answers))
-            while num1 == num:
-                num1 = random.randint(0, len(valid_answers))
-            print("RANDOM CHOSEN 2 ", num1)
-            incorrect_answers.append(num1)
-            print("INCORRECT ", incorrect_answers)
+            incorrect_answers = random.sample(valid_answers, 2)
 
             if random_correct_index == 1:
                 item['right_answer'] = 'A'
                 item['answer_1'] = right_answer
-                item['answer_2'] = correct_answers[incorrect_answers[0]]
-                item['answer_3'] = correct_answers[incorrect_answers[1]]
+                item['answer_2'] = incorrect_answers[0]
+                item['answer_3'] = incorrect_answers[1]
             elif random_correct_index == 2:
                 item['right_answer'] = 'B'
                 item['answer_2'] = right_answer
-                item['answer_1'] = correct_answers[incorrect_answers[0]]
-                item['answer_3'] = correct_answers[incorrect_answers[1]]
+                item['answer_1'] = incorrect_answers[0]
+                item['answer_3'] = incorrect_answers[1]
             else:
                 item['right_answer'] = 'C'
                 item['answer_3'] = right_answer
-                item['answer_1'] = correct_answers[incorrect_answers[0]]
-                item['answer_2'] = correct_answers[incorrect_answers[1]]
+                item['answer_1'] = incorrect_answers[0]
+                item['answer_2'] = incorrect_answers[1]
+
+            # if random_correct_index == 1:
+            #     item['right_answer'] = 'A'
+            #     item['answer_1'] = right_answer
+            #     item['answer_2'] = correct_answers[incorrect_answers[0]]
+            #     item['answer_3'] = correct_answers[incorrect_answers[1]]
+            # elif random_correct_index == 2:
+            #     item['right_answer'] = 'B'
+            #     item['answer_2'] = right_answer
+            #     item['answer_1'] = correct_answers[incorrect_answers[0]]
+            #     item['answer_3'] = correct_answers[incorrect_answers[1]]
+            # else:
+            #     item['right_answer'] = 'C'
+            #     item['answer_3'] = right_answer
+            #     item['answer_1'] = correct_answers[incorrect_answers[0]]
+            #     item['answer_2'] = correct_answers[incorrect_answers[1]]
 
             print("ITEM", item)
             yield item
@@ -107,7 +120,6 @@ class AudioQuizSpider(scrapy.Spider):
 
 class MovieThemeSpider(scrapy.Spider):
     name = "MovieThemeSpider"
-    # f = open(os.getcwd()+"/CrawlBot/spiders/url_audio_single.txt", "r")
     conf = MovieThemeSpiderConf(name).load_configs()
 
 
@@ -116,6 +128,7 @@ class MovieThemeSpider(scrapy.Spider):
     def parse(self, response):
 
         try:
+            self.conf.set_status(response.url,'STARTED')
             question = response.css('.style112::text').get()
 
             audios = response.css('.style75 a').xpath('@href').extract()
@@ -167,35 +180,62 @@ class MovieThemeSpider(scrapy.Spider):
             print("Valid answers: ", len(valid_answers))
             print("Correct Answers: ", len(correct_answers))
 
-            incorrect_answers = []
-            num = random.randint(0, len(valid_answers))
-            print("RANDOM CHOSEN ", num)
-            incorrect_answers.append(num)
+            # incorrect_answers = []
+            # num = random.randint(0, len(valid_answers))
+            # print("RANDOM CHOSEN ", num)
+            # incorrect_answers.append(num)
+            #
+            # num1 = random.randint(0, len(valid_answers))
+            # while num1 == num:
+            #     num1 = random.randint(0, len(valid_answers))
+            # print("RANDOM CHOSEN 2 ", num1)
+            # incorrect_answers.append(num1)
+            # print("INCORRECT ", incorrect_answers)
 
-            num1 = random.randint(0, len(valid_answers))
-            while num1 == num:
-                num1 = random.randint(0, len(valid_answers))
-            print("RANDOM CHOSEN 2 ", num1)
-            incorrect_answers.append(num1)
-            print("INCORRECT ", incorrect_answers)
+
+            incorrect_answers = random.sample(valid_answers, 2)
+
+
+
+
+
 
             # print("incorrect_answers ",incorrect_answers)
+
 
             if random_correct_index == 1:
                 item['right_answer'] = 'A'
                 item['answer_1'] = right_answer
-                item['answer_2'] = correct_answers[incorrect_answers[0]]
-                item['answer_3'] = correct_answers[incorrect_answers[1]]
+                item['answer_2'] = incorrect_answers[0]
+                item['answer_3'] = incorrect_answers[1]
             elif random_correct_index == 2:
                 item['right_answer'] = 'B'
                 item['answer_2'] = right_answer
-                item['answer_1'] = correct_answers[incorrect_answers[0]]
-                item['answer_3'] = correct_answers[incorrect_answers[1]]
+                item['answer_1'] = incorrect_answers[0]
+                item['answer_3'] = incorrect_answers[1]
             else:
                 item['right_answer'] = 'C'
                 item['answer_3'] = right_answer
-                item['answer_1'] = correct_answers[incorrect_answers[0]]
-                item['answer_2'] = correct_answers[incorrect_answers[1]]
+                item['answer_1'] = incorrect_answers[0]
+                item['answer_2'] = incorrect_answers[1]
+
+
+
+            # if random_correct_index == 1:
+            #     item['right_answer'] = 'A'
+            #     item['answer_1'] = right_answer
+            #     item['answer_2'] = correct_answers[incorrect_answers[0]]
+            #     item['answer_3'] = correct_answers[incorrect_answers[1]]
+            # elif random_correct_index == 2:
+            #     item['right_answer'] = 'B'
+            #     item['answer_2'] = right_answer
+            #     item['answer_1'] = correct_answers[incorrect_answers[0]]
+            #     item['answer_3'] = correct_answers[incorrect_answers[1]]
+            # else:
+            #     item['right_answer'] = 'C'
+            #     item['answer_3'] = right_answer
+            #     item['answer_1'] = correct_answers[incorrect_answers[0]]
+            #     item['answer_2'] = correct_answers[incorrect_answers[1]]
 
             print("ITEM", item)
             yield item

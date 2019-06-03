@@ -53,6 +53,13 @@ class YoutubePlaylistSpiderConfig(SpiderConfig):
             'web_pages': [
 
                 {
+                    'url': 'https://www.youtube.com/playlist?list=PL4BrNFx1j7E6a6IKg8N0IgnkoamHlCHWa',
+                    'enable_crawling': True,
+                    'category': 'Disney Songs',
+                    'status': 'NOT STARTED'
+                },
+
+                {
                     'url': 'https://www.youtube.com/playlist?list=PL9oqVauEE2LIXtGYECl3wT1f5ae5EwDEZ',
                     'enable_crawling': True,
                     'category': 'Bollywood songs',
@@ -65,6 +72,9 @@ class YoutubePlaylistSpiderConfig(SpiderConfig):
                     'category': 'Inspiring Movies',
                     'status': 'NOT STARTED'
                 }
+
+
+
 
             ],
 

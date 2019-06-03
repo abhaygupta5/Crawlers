@@ -101,5 +101,5 @@ CSV_DELIMITER = ";"
 # Command to run csv scrapy crawl IndiaBixArrangeSpider -o output.csv -t csv -a CSV_DELIMITER=";"
 
 #FEED_FORMAT = "csv"
-FEED_URI = "IndiaBixSingle.csv"
+# FEED_URI = "IndiaBixSingle.csv"
 #FEED_EXPORT_FIELDS = ["question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path"]
