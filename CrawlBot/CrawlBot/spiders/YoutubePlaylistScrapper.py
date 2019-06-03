@@ -33,6 +33,9 @@ class YoutubePlaylistSpider(scrapy.Spider):
             titles = [t.replace('"', '') for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
             links = [l.get_attribute('href') for l in links]
+
+            difficulty_level = self.conf.get_difficulty_level(response.url)
+
             self.conf.set_status(response.url, 'SUCCESS')
             driver.close()
 
@@ -82,7 +85,7 @@ class YoutubePlaylistSpider(scrapy.Spider):
             question_item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
             question_item['question_type'] = QuestionItem.QUESTION_TYPE_VIDEO_BASED
             question_item['right_answer'] = chr(ord('A') + correct_answer_index_list[i])
-            question_item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_EASY
+            question_item['difficulty_level'] = difficulty_level
             question_item['binary_file_path'] = links[i]
 
             yield question_item

@@ -28,6 +28,7 @@ class JetpunkSpider(scrapy.Spider):
             selenium_options.add_argument('headless')
             driver = webdriver.Chrome(self.path, chrome_options=selenium_options)
             driver.get(response.url)
+            difficulty_level = self.conf.get_difficulty_level(response.url)
             take_quiz = driver.find_element_by_xpath('//*[(@id = "start-button")]')
             take_quiz.click()
 
@@ -68,12 +69,12 @@ class JetpunkSpider(scrapy.Spider):
             self.conf.set_status(response.url,'ERROR '+e.message)
             driver.close()
 
-        number_of_easy_questions = math.floor(0.5 * number_of_questions)
-        number_of_medium_questions = math.ceil(0.3 * number_of_questions)
-        number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
-        index_of_easy = 0
-        index_of_medium = 0
-        index_of_hard = 0
+        # number_of_easy_questions = math.floor(0.5 * number_of_questions)
+        # number_of_medium_questions = math.ceil(0.3 * number_of_questions)
+        # number_of_difficult_questions = number_of_questions - number_of_easy_questions - number_of_medium_questions
+        # index_of_easy = 0
+        # index_of_medium = 0
+        # index_of_hard = 0
 
         # logic to filter
 
@@ -85,15 +86,14 @@ class JetpunkSpider(scrapy.Spider):
             item['binary_file_path'] = self.base_url + images[index]
             item['question_type'] = QuestionItem.QUESTION_TYPE_IMAGE_BASED
             item['_id'] = question+str(index)+images[index]
-            if index_of_easy < number_of_easy_questions:
-                item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_EASY
-                index_of_easy += 1
-            elif index_of_medium < number_of_medium_questions:
-                item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_AVERAGE
-                index_of_medium += 1
-            else:
-                item['difficulty_level'] = QuestionItem.DIFFICULTY_LEVEL_HARD
-                index_of_hard += 1
+            item['difficulty_level'] = difficulty_level
+
+            # if index_of_easy < number_of_easy_questions:
+            #     index_of_easy += 1
+            # elif index_of_medium < number_of_medium_questions:
+            #     index_of_medium += 1
+            # else:
+            #     index_of_hard += 1
 
             random_correct_index = random.choice([1, 2, 3])
 
