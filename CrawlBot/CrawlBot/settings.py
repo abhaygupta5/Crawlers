@@ -22,12 +22,12 @@ NEWSPIDER_MODULE = 'CrawlBot.spiders'
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -89,6 +89,8 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
+# STATS_CLASS = 'scraper.stats.MyStatsCollector'
+
 #Export as CSV Feed
 FEED_EXPORTERS = {
     'csv': 'CrawlBot.custom_csv_class.MyProjectCsvItemExporter',
@@ -99,8 +101,8 @@ FIELDS_TO_EXPORT = [
 ]
 CSV_DELIMITER = ";"
 
-# Command to run csv scrapy crawl IndiaBixArrangeSpider -o output.csv -t csv -a CSV_DELIMITER=";"
+# Command to run csv scrapy crawl IndiaBixArrangeSpider -o test.csv -a filename=test.csv -t csv -a CSV_DELIMITER=";"
 
 #FEED_FORMAT = "csv"
-# FEED_URI = "IndiaBixSingle.csv"
+#FEED_URI = "IndiaBixSingle.csv"
 #FEED_EXPORT_FIELDS = ["question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path"]

@@ -7,6 +7,9 @@ import math
 import random
 import time
 import os
+from scrapy import signals
+from scrapy.xlib.pydispatch import dispatcher
+import requests
 
 from ..configurations import JetpunkSpiderConf
 
@@ -14,8 +17,24 @@ from ..configurations import JetpunkSpiderConf
 class JetpunkSpider(scrapy.Spider):
     name = "JetpunkSpider"
     base_url = "https://www.jetpunk.com"
+
+    def __init__(self, filename='', **kwargs):
+        self.fileName = filename
+        dispatcher.connect(self.spider_closed, signals.spider_closed)
+        super(JetpunkSpider, self).__init__(**kwargs)
+
+    def spider_closed(self, spider):
+        with open(self.fileName, 'rb') as f:
+            r = requests.post('http://httpbin.org/post', files={self.fileName: f})
+            print(f.readline())
+        print("ENDING OF SPIDER")
+
     conf = JetpunkSpiderConf(name).load_configs()
     start_urls = conf.get_starting_urls()
+    custom_settings = {
+        'DOWNLOAD_DELAY': conf.delay,
+        'CONCURRENT_REQUESTS': conf.num_of_threads
+    }
     path = "chromedriver"
 
     default_difficulty_level = ''

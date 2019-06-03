@@ -29,7 +29,6 @@ class SpiderConfig(object):
         self.web_configs = self.collection.find_one({'spider_name': self.spider_name})
         self.num_of_threads = self.web_configs['num_of_threads']
         self.delay = self.web_configs['delay']
-        self.csv_file_name = self.web_configs['csv_file_name']
 
 
         web_url_objects = self.web_configs['web_pages']
@@ -71,8 +70,6 @@ class SpiderConfig(object):
             return self.answer_type[url]
         return default
 
-    def get_csv_file_name(self):
-        return self.csv_file_name
 
     def set_status(self, url, status):
         web_url_objects = self.web_configs['web_pages']
@@ -95,9 +92,8 @@ class YoutubePlaylistSpiderConfig(SpiderConfig):
 
         data = {
             'spider_name': self.spider_name,
-            'csv_file_name': self.spider_name + '.csv',
-            'num_of_threads': 2,
-            'delay': 20,
+            'num_of_threads': 20,
+            'delay': 2,
             'web_pages': [
 
                 {
@@ -152,15 +148,14 @@ class JetpunkSpiderConf(SpiderConfig):
 
         data = {
             'spider_name': self.spider_name,
-            'csv_file_name': self.spider_name + '.csv',
-            'num_of_threads': 2,
-            'delay': 20,
+            'num_of_threads': 20,
+            'delay': 2,
             'web_pages': [
 
                 {
                     'url': 'https://www.jetpunk.com/quizzes/country-flag-1',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Country Flag',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_IMAGE_BASED,
@@ -171,7 +166,7 @@ class JetpunkSpiderConf(SpiderConfig):
                 {
                     'url': 'https://www.jetpunk.com/user-quizzes/139806/brand-logos-quiz-1',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Brand',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_IMAGE_BASED,
@@ -181,7 +176,7 @@ class JetpunkSpiderConf(SpiderConfig):
                 {
                     'url': 'https://www.jetpunk.com/user-quizzes/139806/car-logos-quiz',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Cars',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_IMAGE_BASED,
@@ -192,7 +187,7 @@ class JetpunkSpiderConf(SpiderConfig):
                 {
                     'url': 'https://www.jetpunk.com/user-quizzes/139806/brand-logos-quiz-2',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Brand',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_IMAGE_BASED,
@@ -202,7 +197,7 @@ class JetpunkSpiderConf(SpiderConfig):
                 {
                     'url': 'https://www.jetpunk.com/quizzes/car-logos-quiz-2',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Cars',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_IMAGE_BASED,
@@ -212,7 +207,7 @@ class JetpunkSpiderConf(SpiderConfig):
                 {
                     'url': 'https://www.jetpunk.com/quizzes/random-logos-quiz',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Random',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_IMAGE_BASED,
@@ -235,15 +230,14 @@ class IndiaBixSingleSpiderConfig(SpiderConfig):
         # self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
         data = {
             'spider_name': self.spider_name,
-            'csv_file_name': self.spider_name + '.csv',
-            'num_of_threads': 2,
-            'delay': 20,
+            'num_of_threads': 20,
+            'delay': 2,
             'web_pages': [
 
                 {
                     'url': 'https://www.indiabix.com/general-knowledge/basic-general-knowledge/005001',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'General Knowledge',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_TEXT_BASED,
@@ -253,7 +247,7 @@ class IndiaBixSingleSpiderConfig(SpiderConfig):
                 {
                     'url': 'https://www.indiabix.com/general-knowledge/general-science/036001',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'General Science',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_TEXT_BASED,
@@ -262,7 +256,7 @@ class IndiaBixSingleSpiderConfig(SpiderConfig):
                 {
                     'url': 'https://www.indiabix.com/general-knowledge/indian-politics/002001',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Indian Politics',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_TEXT_BASED,
@@ -272,7 +266,7 @@ class IndiaBixSingleSpiderConfig(SpiderConfig):
                 {
                     'url': 'https://www.indiabix.com/general-knowledge/books-and-authors/031001',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Books and Authors',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_TEXT_BASED,
@@ -282,7 +276,7 @@ class IndiaBixSingleSpiderConfig(SpiderConfig):
                 {
                     'url': 'https://www.indiabix.com/general-knowledge/sports/012001',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Sports',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_TEXT_BASED,
@@ -305,15 +299,14 @@ class IndiaBixArrangeSpiderConfig(SpiderConfig):
         # self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
         data = {
             'spider_name': self.spider_name,
-            'csv_file_name': self.spider_name + '.csv',
-            'num_of_threads': 2,
-            'delay': 20,
+            'num_of_threads': 20,
+            'delay': 2,
             'web_pages': [
 
                 {
                     'url': 'https://www.indiabix.com/verbal-reasoning/logical-sequence-of-words/053001',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Verbal',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_TEXT_BASED,
@@ -323,7 +316,7 @@ class IndiaBixArrangeSpiderConfig(SpiderConfig):
                 {
                     'url': 'https://www.indiabix.com/verbal-reasoning/logical-sequence-of-words/070001',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Verbal',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_TEXT_BASED,
@@ -347,15 +340,14 @@ class AvattoSpiderConf(SpiderConfig):
         # self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
         data = {
             'spider_name': self.spider_name,
-            'csv_file_name': self.spider_name + '.csv',
-            'num_of_threads': 2,
-            'delay': 20,
+            'num_of_threads': 20,
+            'delay': 2,
             'web_pages': [
 
                 {
                     'url': 'https://www.avatto.com/general-knowledge/questions/mcqs/kbc/answers/285/1.html',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Random',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_TEXT_BASED,
@@ -364,7 +356,7 @@ class AvattoSpiderConf(SpiderConfig):
                 {
                     'url': 'https://www.avatto.com/general-knowledge/questions/mcqs/countries/answers/282/1.html',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Random',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_TEXT_BASED,
@@ -387,15 +379,14 @@ class AudioQuizSpiderConf(SpiderConfig):
         # self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
         data = {
             'spider_name': self.spider_name,
-            'csv_file_name': self.spider_name + '.csv',
-            'num_of_threads': 2,
-            'delay': 20,
+            'num_of_threads': 20,
+            'delay': 2,
             'web_pages': [
 
                 {
                     'url': 'https://www.quizmasters.biz/DB/Audio/National%20Anthems/National%20Anthems.html',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'National Anthem',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_AUDIO_BASED,
@@ -418,15 +409,14 @@ class MovieThemeSpiderConf(SpiderConfig):
         # self.collection.create_index([('spider_name', pymongo.TEXT)], name="spider_index")
         data = {
             'spider_name': self.spider_name,
-            'csv_file_name': self.spider_name + '.csv',
-            'num_of_threads': 2,
-            'delay': 20,
+            'num_of_threads': 20,
+            'delay': 2,
             'web_pages': [
 
                 {
                     'url': 'https://www.quizmasters.biz/DB/Audio/Movie%20Themes/Movie%20Themes.html',
                     'enable_crawling': True,
-                    'category': '',
+                    'category': 'Movies',
                     'status': 'NOT STARTED',
                     'difficulty_level': QuestionItem.DIFFICULTY_LEVEL_EASY,
                     'question_type': QuestionItem.QUESTION_TYPE_AUDIO_BASED,

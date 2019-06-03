@@ -4,16 +4,33 @@ import math
 import random
 import re
 import os
-
+from scrapy import signals
+from scrapy.xlib.pydispatch import dispatcher
+import requests
 from ..configurations import AvattoSpiderConf
 
 
 class AvattoSpider(scrapy.Spider):
     name = "AvattoSpider"
     base_url = "https://www.avatto.com/general-knowledge/questions/mcqs/kbc/answers/285/"
+
+    def __init__(self, filename='', **kwargs):
+        self.fileName = filename
+        dispatcher.connect(self.spider_closed, signals.spider_closed)
+        super(AvattoSpider, self).__init__(**kwargs)
+
+    def spider_closed(self, spider):
+        with open(self.fileName, 'rb') as f:
+            r = requests.post('http://httpbin.org/post', files={self.fileName: f})
+            print(f.readline())
+        print("ENDING OF SPIDER")
+
     conf = AvattoSpiderConf(name).load_configs()
     start_urls = conf.get_starting_urls()
-
+    custom_settings = {
+        'DOWNLOAD_DELAY': conf.delay,
+        'CONCURRENT_REQUESTS': conf.num_of_threads
+    }
 
     default_difficulty_level = ''
     default_category = ''
@@ -35,10 +52,20 @@ class AvattoSpider(scrapy.Spider):
 
             # question_numbers = len(response.css('.ques p::text').extract())
             questions = response.css('.ques').xpath("string(./p)").extract()
+            questions = [re.sub(r"\s+", " ", question.strip().replace('\n', ' ')).replace('\"', '').replace("\'", "\\'")
+                         for question in questions]
             options_A = response.css('tr:first_child td:nth-child(2) span p::text').extract()
+            options_A = [option.strip().replace('\n', ' ').replace('\"', '').replace("\'", "\\'") for option in
+                         options_A]
             options_B = response.css('tr:nth_child(2) td:nth-child(2) span p::text').extract()
+            options_B = [option.strip().replace('\n', ' ').replace('\"', '').replace("\'", "\\'") for option in
+                         options_B]
             options_C = response.css('tr:nth_child(3) td:nth-child(2) span p::text').extract()
+            options_C = [option.strip().replace('\n', ' ').replace('\"', '').replace("\'", "\\'") for option in
+                         options_C]
             options_D = response.css('tr:nth_child(4) td:nth-child(2) span p::text').extract()
+            options_D = [option.strip().replace('\n', ' ').replace('\"', '').replace("\'", "\\'") for option in
+                         options_D]
 
             # print(len(options_A), len(options_B), len(options_C), len(options_D))
             # print()
@@ -71,7 +98,7 @@ class AvattoSpider(scrapy.Spider):
             item = QuestionItem()
             # item['_id'] = questions[index]
             # print(item['_id'])
-            item['question_text'] = questions[index].strip()
+            item['question_text'] = questions[index]
             item['binary_file_path'] = None
 
             item['question_type'] = question_type
@@ -84,70 +111,70 @@ class AvattoSpider(scrapy.Spider):
             if str(correct_answers[index]) == "A":
                 # item['right_answer'] = options_A[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_A[index].strip()
-                    item['answer_2'] = options_B[index].strip()
-                    item['answer_3'] = options_C[index].strip()
+                    item['answer_1'] = options_A[index]
+                    item['answer_2'] = options_B[index]
+                    item['answer_3'] = options_C[index]
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_A[index].strip()
-                    item['answer_1'] = options_D[index].strip()
-                    item['answer_3'] = options_B[index].strip()
+                    item['answer_2'] = options_A[index]
+                    item['answer_1'] = options_D[index]
+                    item['answer_3'] = options_B[index]
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_A[index].strip()
-                    item['answer_1'] = options_C[index].strip()
-                    item['answer_2'] = options_D[index].strip()
+                    item['answer_3'] = options_A[index]
+                    item['answer_1'] = options_C[index]
+                    item['answer_2'] = options_D[index]
                     item['right_answer'] = "C"
             elif str(correct_answers[index]) == "B":
                 # item['right_answer'] = options_B[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_B[index].strip()
-                    item['answer_2'] = options_A[index].strip()
-                    item['answer_3'] = options_C[index].strip()
+                    item['answer_1'] = options_B[index]
+                    item['answer_2'] = options_A[index]
+                    item['answer_3'] = options_C[index]
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_B[index].strip()
-                    item['answer_1'] = options_D[index].strip()
-                    item['answer_3'] = options_A[index].strip()
+                    item['answer_2'] = options_B[index]
+                    item['answer_1'] = options_D[index]
+                    item['answer_3'] = options_A[index]
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_B[index].strip()
-                    item['answer_1'] = options_C[index].strip()
-                    item['answer_2'] = options_D[index].strip()
+                    item['answer_3'] = options_B[index]
+                    item['answer_1'] = options_C[index]
+                    item['answer_2'] = options_D[index]
                     item['right_answer'] = "C"
             elif str(correct_answers[index]) == "C":
                 # item['right_answer'] = options_C[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_C[index].strip()
-                    item['answer_2'] = options_B[index].strip()
-                    item['answer_3'] = options_A[index].strip()
+                    item['answer_1'] = options_C[index]
+                    item['answer_2'] = options_B[index]
+                    item['answer_3'] = options_A[index]
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_C[index].strip()
-                    item['answer_1'] = options_D[index].strip()
-                    item['answer_3'] = options_B[index].strip()
+                    item['answer_2'] = options_C[index]
+                    item['answer_1'] = options_D[index]
+                    item['answer_3'] = options_B[index]
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_C[index].strip()
-                    item['answer_1'] = options_A[index].strip()
-                    item['answer_2'] = options_D[index].strip()
+                    item['answer_3'] = options_C[index]
+                    item['answer_1'] = options_A[index]
+                    item['answer_2'] = options_D[index]
                     item['right_answer'] = "C"
             else:
                 # item['right_answer'] = options_D[index]
                 if random_correct_index == 1:
-                    item['answer_1'] = options_D[index].strip()
-                    item['answer_2'] = options_B[index].strip()
-                    item['answer_3'] = options_C[index].strip()
+                    item['answer_1'] = options_D[index]
+                    item['answer_2'] = options_B[index]
+                    item['answer_3'] = options_C[index]
                     item['right_answer'] = "A"
                 elif random_correct_index == 2:
-                    item['answer_2'] = options_D[index].strip()
-                    item['answer_1'] = options_A[index].strip()
-                    item['answer_3'] = options_B[index].strip()
+                    item['answer_2'] = options_D[index]
+                    item['answer_1'] = options_A[index]
+                    item['answer_3'] = options_B[index]
                     item['right_answer'] = "B"
                 else:
-                    item['answer_3'] = options_D[index].strip()
-                    item['answer_1'] = options_C[index].strip()
-                    item['answer_2'] = options_A[index].strip()
+                    item['answer_3'] = options_D[index]
+                    item['answer_1'] = options_C[index]
+                    item['answer_2'] = options_A[index]
                     item['right_answer'] = "C"
 
             print(item)

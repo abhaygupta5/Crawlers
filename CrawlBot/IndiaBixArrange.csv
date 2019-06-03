@@ -1,0 +1,62 @@
+question_text;answer_1;answer_2;answer_3;answer_type;right_answer;question_type;difficulty_level;binary_file_path;category
+Arrange the words given below in a meaningful sequence.1. Key 2. Door 3. Lock 4. Room 5. Switch on;1, 2, 3, 5, 4;1, 3, 2, 4, 5;4, 2, 1, 5, 3;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Word 2. Paragraph 3. Sentence 4. Letters 5. Phrase;4, 2, 5, 1, 3;4, 1, 5, 2, 3;4, 1, 5, 3, 2;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Police 2. Punishment 3. Crime 4. Judge 5. Judgement;5, 4, 3, 2, 1;3, 1, 2, 4, 5;3, 1, 4, 5, 2;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Family 2. Community 3. Member 4. Locality 5. Country;3, 1, 4, 5, 2;3, 1, 2, 4, 5;3, 1, 2, 5, 4;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Poverty 2. Population 3. Death 4. Unemployment 5. Disease;2, 4, 1, 5, 3;3, 4, 2, 5, 1;2, 3, 4, 5, 1;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Never    2. Sometimes    3. Generally    4. Seldom    5. Always;5, 3, 2, 1, 4;5, 2, 1, 3, 4;5, 3, 2, 4, 1;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Index    2. Contents    3. Title    4. Chapters    5. Introduction;3, 2, 5, 4, 1;3, 2, 5, 1, 4;2, 3, 4, 5, 1;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Income    2. Status    3. Education    4. Well-being    5. Job;1, 2, 5, 3, 4;3, 5, 1, 2, 4;1, 3, 2, 5, 4;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Table    2. Tree    3. Wood    4. Seed    5. Plant;4, 5, 3, 2, 1;4, 5, 2, 3, 1;1, 3, 2, 4, 5;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Windows    2. Walls    3. Floor    4. Foundation    5. Roof    6. Room;4, 5, 3, 2, 1, 6;4, 2, 1, 5, 3, 6;4, 1, 5, 6, 2, 3;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Leaf 2. Fruit 3. Stem 4. Root 5. Flower;4, 1, 3, 5, 2;4, 3, 1, 2, 5;4, 3, 1, 5, 2;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Nation 2. Village 3. City 4. District 5. State;1, 3, 5, 4, 2;1, 2, 3, 4, 5;2, 3, 4, 5, 1;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Caste 2. Family 3. Newly married Couple 4. Clan 5. Species;3, 2, 1, 4, 5;3, 4, 5, 1, 2;2, 3, 1, 4, 5;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Cut 2. Put on 3. Mark 4. Measure 5. Tailor;3, 1, 5, 4, 2;4, 3, 1, 5, 2;2, 4, 3, 1, 5;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. House 2. Street 3. Room 4. Town 5. District;3, 1, 2, 5, 4;3, 1, 2, 4, 5;3, 1, 4, 2, 5;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Presentation    2. Recommendation    3. Arrival    4. Discussion    5. Introduction;5, 3, 4, 1, 2;3, 5, 1, 4, 2;3, 5, 4, 2, 1;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Butterfly    2. Cocoon    3. Egg    4. Worm;3, 4, 2, 1;1, 4, 3, 2;2, 4, 1, 3;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Rain    2. Monsoon    3. Rescue    4. Flood    5. Shelter    6. Relief;4, 1, 2, 3, 5, 6;2, 1, 4, 3, 5, 6;1, 2, 4, 5, 3, 6;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Milky way    2. Sun    3. Moon    4. Earth    5. Stars;4, 3, 2, 5, 1;3, 4, 2, 5, 1;2, 3, 4, 5, 1;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Foetus    2. Child    3. Baby    4. Adult    5. Youth;1,3,2,5,4;1, 2,4, 3, 5;2, 3, 5, 4, 1;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Wall 2. Clay 3. House 4. Room 5. Bricks;5, 2, 1, 4, 3;1, 2, 3, 4, 5;2, 5, 1, 4, 3;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Probation 2. Interview 3. Selection 4. Appointment 5. Advertisement 6. Application;5, 6, 2, 3, 4, 1;5, 6, 4, 2, 3, 1;5, 6, 3, 2, 4, 1;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Elephant 2. Cat 3. Mosquito 4. Tiger 5. Whale;3, 2, 4, 1, 5;5, 3, 1, 2, 4;1, 3, 5, 4, 2;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Yarn 2. Plant 3. Saree 4. Cotton 5. Cloth;2, 4, 5, 3, 1;2, 4, 1, 5, 3;2, 4, 3, 5, 1;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Infant 2. Old 3. Adult 4. Adolescent 5. Child;1, 5, 4, 3, 2;3, 4, 2, 1, 5;2, 3, 4, 5, 1;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Sea    2. Rivulet    3. Ocean    4. River    5. Glacier;5, 2, 4, 1, 3;5, 2, 1, 3, 4;5, 4, 2, 3, 1;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Doctor    2. Fever    3. Prescribe    4. Diagnose    5. Medicine;2, 4, 3, 5, 1;2, 1, 4, 3, 5;2, 1, 3, 4, 5;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Reading    2. Composing    3. Writing    4. Printing;3, 2, 4, 1;2, 3, 4, 1;3, 1, 2, 4;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Hecto    2. Centi    3. Deca    4. Kilo    5. Deci;2, 5, 3, 1, 4;1, 5, 3, 4, 2;1, 3, 4, 5, 2;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Honey    2. Flower    3. Bee    4. Wax;1, 3, 4, 2;4, 3, 2, 1;2, 3, 1, 4;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Leaves 2. Branch 3. Flower 4. Tree 5. Fruit;4, 3, 2, 1, 5;4, 3, 1, 2, 5;4, 2, 1, 3, 5;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Tree 2. Seed 3. Flowers 4. Fruit 5. Plant;5, 2, 1, 3, 4;2, 5, 3, 1, 4;2, 5, 1, 3, 4;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Adult 2. Child 3. Infant 4. Boy 5. Adolescent;2, 3, 4, 1, 5;1, 3, 4, 5, 2;3, 2, 4, 5, 1;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Protect 2. Pressure 3. Relief 4. Rain 5. Flood;3, 2, 4, 5, 1;2, 4, 5, 1, 3;2, 4, 3, 1, 5;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Presentation 2. Recommendation 3. Arrival 4. Discussion 5. Introduction;5, 3, 1, 2, 4;3, 5, 1, 4, 2;3, 5, 4, 2, 1;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Probation    2. Interview    3. Selection;5, 6, 2, 3, 4, 1;5, 6, 3, 2, 4, 1;5, 6, 4, 2, 3, 1;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Country    2. Furniture    3. Forest    4. Wood    5. Trees;2, 4, 3, 1, 5;5, 2, 3, 1, 4;1, 3, 5, 4, 2;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Site    2. Plan    3. Rent    4. Money    5. Building    6. Construction;1, 2, 3, 6, 5, 4;4, 1, 2, 6, 5, 3;2, 3, 6, 5, 1, 4;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Key    2. Door    3. Lock    4. Room    5. Switch on;5, 1, 2, 4, 3;1, 3, 2, 4, 5;1, 2, 3, 5, 4;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. District    2. Village    3. State    4. Town    5. City;2, 4, 1, 5, 3;2, 1, 4, 5, 3;5, 3, 2, 1, 4;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Income 2. Status 3. Education 4. Well-being 5. Job;1, 2, 5, 3, 4;3, 1, 5, 2, 4;3, 5, 1, 2, 4;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Heel 2. Shoulder 3. Skull 4. Neck 5. Knee 6. Chest 7. Thigh 8. Stomach 9. Face 1 0. Hand;2, 4, 7, 10, 1, 5, 8, 9, 6, 3;4, 7, 10, 1, 9, 6, 2, 5, 8, 3;3, 9, 4, 2, 10, 6, 8, 7, 5, 1;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Rainbow 2. Rain 3. Sun 4. Happy 5. Child;2, 3, 1, 5, 4;4, 2, 3, 5, 1;4, 5, 1, 2, 3;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Rainbow    2. Rain    3. Sun    4. Happy    5. Child;4, 5, 1, 2, 3;2, 3, 1, 5, 4;2, 1, 4, 3, 5;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Heel    2. Shoulder    3. Skull    4. Neck    5. Knee;4, 7, 10, 1, 9, 6, 3, 2, 5, 8,;2, 4, 7, 10, 1, 5, 8, 9, 6, 3;3, 9, 4, 2, 10, 6, 8, 7, 5, 1;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Cutting    2. Dish    3. Vegetable    4. Market    5. Cooking;4, 3, 1, 5, 2;3, 2, 5, 1, 4;1, 2, 4, 5, 3;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Elephant    2. Cat    3. Mosquito    4. Tiger    5. Whale;1, 3, 5, 4, 2;5, 3, 1, 2, 4;3, 2, 4, 1, 5;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Cut    2. Put on    3. Mark    4. Measure    5. Tailor;1, 3, 2, 4, 5;4, 3, 1, 5, 2;2, 4, 3, 1, 5;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Yarn    2. Plant    3. Saree    4. Cotton    5. Cloth;2, 4, 5, 3, 1;2, 4, 1, 5, 3;2, 4, 3, 5, 1;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Police    2. Punishment    3. Crime    4. Justice    5. Judgement;1, 2, 3, 4, 5;5, 4, 3, 2, 1;3, 1, 4, 5, 2;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Patient    2. Diagnosis    3. Bill    4. Doctor    5. Treatment;1, 4, 2, 5, 3;1, 4, 3, 2, 5;1, 4, 2, 3, 5;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Andhra Pradesh    2. Universe    3. Tirupati    4. World    5. India;3, 1, 5, 4, 2;2, 1, 3, 5, 4;1, 5, 3, 2, 4;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Study    2. Job    3. Examination    4. Earn    5. Apply;1, 3, 2, 5, 4;1, 3, 5, 4, 2;1, 3, 5, 2, 4;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Atomic Age    2. Metallic Age    3. Stone Age    4. Alloy Age;3, 2, 4, 1;2, 3, 1, 4;1, 3, 4, 2;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Book    2. Pulp    3. Timber    4. Jungle    5. Paper;5, 4, 3, 1, 2;4, 3, 2, 5, 1;3, 2, 5, 1, 4;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Sentence    2. Chapter    3. Letter    4. Book    5. Word    6. Paragraph;4, 6, 2, 5, 1, 3;4, 2, 6, 1, 5, 3;4, 2, 1, 6, 5, 3;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Leaf    2. Fruit    3. Stem    4. Root    5. Flower;4, 3, 1, 2, 5;3, 4, 5, 1, 2;4, 3, 1, 5, 2;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. College    2. Child    3. Salary    4. School    5. Employment;2, 4, 1, 5, 3;1, 2, 4, 3, 5;4, 1, 3, 5, 2;Arrange the order;A;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Puberty    2. Adulthood    3. Childhood;5, 6, 2, 3, 4, 1;4, 3, 1, 6, 2, 5;2, 4, 6, 3, 1, 5;Arrange the order;B;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Mother    2. Child    3. Milk    4. Cry    5. Smile;2, 4, 3, 1, 5;3, 2, 1, 5, 4;2, 4, 1, 3, 5;Arrange the order;C;Text-Based;Easy;;Verbal
+Arrange the words given below in a meaningful sequence.1. Post-box    2. Letter    3. Envelope    4. Delivery    5. Clearance;3, 2, 4, 5, 1;3, 2, 1, 5, 4;3, 2, 1, 4, 5;Arrange the order;B;Text-Based;Easy;;Verbal
