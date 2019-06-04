@@ -29,7 +29,7 @@ class SpiderConfig(object):
         self.web_configs = self.collection.find_one({'spider_name': self.spider_name})
         self.num_of_threads = self.web_configs['num_of_threads']
         self.delay = self.web_configs['delay']
-
+        self.csv_file_name = self.web_configs['csv_file_name']
 
         web_url_objects = self.web_configs['web_pages']
         for web_obj in web_url_objects:
@@ -41,7 +41,10 @@ class SpiderConfig(object):
                 self.starting_urls.append(web_obj['url'])
         return self
 
-    def get_category(self,url,default):
+    def get_csv_file_name(self):
+        return self.csv_file_name
+
+    def get_category(self, url, default):
         if url in self.category:
             return self.category[url]
         return default
@@ -55,7 +58,7 @@ class SpiderConfig(object):
     def get_starting_urls(self):
         return self.starting_urls
 
-    def get_difficulty_level(self, url,default):
+    def get_difficulty_level(self, url, default):
         if url in self.difficulty_level:
             return self.difficulty_level[url]
         return default
@@ -65,11 +68,10 @@ class SpiderConfig(object):
             return self.question_type[url]
         return default
 
-    def get_answer_type(self, url,default):
+    def get_answer_type(self, url, default):
         if url in self.answer_type:
             return self.answer_type[url]
         return default
-
 
     def set_status(self, url, status):
         web_url_objects = self.web_configs['web_pages']
@@ -79,7 +81,7 @@ class SpiderConfig(object):
                 break
 
         self.collection.update({'_id': self.spider_name}, self.web_configs)
-        print('--------->UPDATING STATUS')
+        print('--------->UPDATING STATUS ' , status )
 
 
 class YoutubePlaylistSpiderConfig(SpiderConfig):
@@ -93,7 +95,8 @@ class YoutubePlaylistSpiderConfig(SpiderConfig):
         data = {
             'spider_name': self.spider_name,
             'num_of_threads': 20,
-            'delay': 2,
+            'csv_file_name': self.spider_name + '.csv',
+            'delay': 0,
             'web_pages': [
 
                 {
@@ -149,7 +152,8 @@ class JetpunkSpiderConf(SpiderConfig):
         data = {
             'spider_name': self.spider_name,
             'num_of_threads': 20,
-            'delay': 2,
+            'csv_file_name': self.spider_name + '.csv',
+            'delay': 0,
             'web_pages': [
 
                 {
@@ -231,7 +235,8 @@ class IndiaBixSingleSpiderConfig(SpiderConfig):
         data = {
             'spider_name': self.spider_name,
             'num_of_threads': 20,
-            'delay': 2,
+            'csv_file_name': self.spider_name + '.csv',
+            'delay': 0,
             'web_pages': [
 
                 {
@@ -300,6 +305,7 @@ class IndiaBixArrangeSpiderConfig(SpiderConfig):
         data = {
             'spider_name': self.spider_name,
             'num_of_threads': 20,
+            'csv_file_name': self.spider_name + '.csv',
             'delay': 0,
             'web_pages': [
 
@@ -341,7 +347,8 @@ class AvattoSpiderConf(SpiderConfig):
         data = {
             'spider_name': self.spider_name,
             'num_of_threads': 20,
-            'delay': 2,
+            'csv_file_name': self.spider_name + '.csv',
+            'delay': 0,
             'web_pages': [
 
                 {
@@ -380,7 +387,8 @@ class AudioQuizSpiderConf(SpiderConfig):
         data = {
             'spider_name': self.spider_name,
             'num_of_threads': 20,
-            'delay': 2,
+            'csv_file_name': self.spider_name + '.csv',
+            'delay': 0,
             'web_pages': [
 
                 {
@@ -410,7 +418,8 @@ class MovieThemeSpiderConf(SpiderConfig):
         data = {
             'spider_name': self.spider_name,
             'num_of_threads': 20,
-            'delay': 2,
+            'csv_file_name': self.spider_name + '.csv',
+            'delay': 0,
             'web_pages': [
 
                 {

@@ -15,19 +15,6 @@ class AvattoSpider(scrapy.Spider):
     name = "AvattoSpider"
     base_url = "https://www.avatto.com/general-knowledge/questions/mcqs/kbc/answers/285/"
 
-    def __init__(self, filename='', **kwargs):
-        self.fileName = filename
-        dispatcher.connect(self.spider_closed, signals.spider_closed)
-        super(AvattoSpider, self).__init__(**kwargs)
-
-    def spider_closed(self, spider):
-        multipart_form_data = {
-            'file': (self.fileName, open(self.fileName, 'rb')),
-        }
-        response = requests.post(URL_TO_SEND, files=multipart_form_data)
-        print(response.text)
-        print("ENDING OF SPIDER")
-
     conf = AvattoSpiderConf(name).load_configs()
     start_urls = conf.get_starting_urls()
     custom_settings = {

@@ -6,31 +6,13 @@ from scrapy.http import HtmlResponse
 import math
 import random
 import time
-import os
-from scrapy import signals
-from scrapy.xlib.pydispatch import dispatcher
-import requests
-
+import logging
 from ..configurations import JetpunkSpiderConf
-from ..settings import URL_TO_SEND
 
 
 class JetpunkSpider(scrapy.Spider):
     name = "JetpunkSpider"
     base_url = "https://www.jetpunk.com"
-
-    def __init__(self, filename='', **kwargs):
-        self.fileName = filename
-        dispatcher.connect(self.spider_closed, signals.spider_closed)
-        super(JetpunkSpider, self).__init__(**kwargs)
-
-    def spider_closed(self, spider):
-        multipart_form_data = {
-            'file': (self.fileName, open(self.fileName, 'rb')),
-        }
-        response = requests.post(URL_TO_SEND, files=multipart_form_data)
-        print(response.text)
-        print("ENDING OF SPIDER")
 
     conf = JetpunkSpiderConf(name).load_configs()
     start_urls = conf.get_starting_urls()
@@ -40,12 +22,17 @@ class JetpunkSpider(scrapy.Spider):
     }
     path = "chromedriver"
 
-    default_difficulty_level = ''
-    default_category = ''
-    default_question_type = ''
-    default_answer_type = ''
+    def __init__(self):
+        self.default_difficulty_level = ''
+        self.default_category = ''
+        self.default_question_type = ''
+        self.default_answer_type = ''
 
     def parse(self, response):
+
+        selenium_options = webdriver.ChromeOptions()
+        selenium_options.add_argument('headless')
+        driver = webdriver.Chrome(self.path, chrome_options=selenium_options)
 
         try:
             difficulty_level = self.conf.get_difficulty_level(response.url, self.default_difficulty_level)
@@ -58,15 +45,11 @@ class JetpunkSpider(scrapy.Spider):
             self.default_question_type = question_type
             self.default_answer_type = answer_type
 
-            selenium_options = webdriver.ChromeOptions()
-            selenium_options.add_argument('headless')
-            driver = webdriver.Chrome(self.path, chrome_options=selenium_options)
+
             driver.get(response.url)
-            difficulty_level = self.conf.get_difficulty_level(response.url)
             take_quiz = driver.find_element_by_xpath('//*[(@id = "start-button")]')
             take_quiz.click()
 
-            number_of_questions = 0
             give_up = driver.find_element_by_xpath(
                 '//*[contains(concat( " ", @class, " " ), concat( " ", "link-like", " " ))]')
             give_up.click()
@@ -102,6 +85,7 @@ class JetpunkSpider(scrapy.Spider):
             self.conf.set_status(response.url,'SUCCESS')
         except Exception,e :
             number_of_questions = 0
+            logging.error('Error :' +e.message)
             self.conf.set_status(response.url,'ERROR '+e.message)
             driver.close()
 
@@ -112,7 +96,7 @@ class JetpunkSpider(scrapy.Spider):
             item = QuestionItem()
             item['question_text'] = question.strip()
             item['binary_file_path'] = self.base_url + images[index]
-            item['_id'] = question+str(index)+images[index]
+            # item['_id'] = question+str(index)+images[index]
 
             item['question_type'] = question_type
             item['answer_type'] = answer_type

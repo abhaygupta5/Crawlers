@@ -1,30 +1,13 @@
+
+
 import scrapy
 from ..items import QuestionItem
-import math
 import random
 from ..configurations import AudioQuizSpiderConf, MovieThemeSpiderConf
-from scrapy import signals
-from scrapy.xlib.pydispatch import dispatcher
-import requests
-from ..settings import URL_TO_SEND
 
 
 class AudioQuizSpider(scrapy.Spider):
     name = "AudioQuizSpider"
-
-    def __init__(self, filename='', **kwargs):
-        self.fileName = filename
-        dispatcher.connect(self.spider_closed, signals.spider_closed)
-        super(AudioQuizSpider, self).__init__(**kwargs)
-
-    def spider_closed(self, spider):
-        multipart_form_data = {
-            'file': (self.fileName, open(self.fileName, 'rb')),
-        }
-        response = requests.post(URL_TO_SEND, files=multipart_form_data)
-        print(response.text)
-        print("ENDING OF SPIDER")
-
     conf = AudioQuizSpiderConf(name).load_configs()
     start_urls = conf.get_starting_urls()
     custom_settings = {
@@ -108,19 +91,6 @@ class AudioQuizSpider(scrapy.Spider):
 
 class MovieThemeSpider(scrapy.Spider):
     name = "MovieThemeSpider"
-
-    def __init__(self, filename='', **kwargs):
-        self.fileName = filename
-        dispatcher.connect(self.spider_closed, signals.spider_closed)
-        super(MovieThemeSpider, self).__init__(**kwargs)
-
-    def spider_closed(self, spider):
-        multipart_form_data = {
-            'file': (self.fileName, open(self.fileName, 'rb')),
-        }
-        response = requests.post(URL_TO_SEND, files=multipart_form_data)
-        print(response.text)
-        print("ENDING OF SPIDER")
 
     conf = MovieThemeSpiderConf(name).load_configs()
 

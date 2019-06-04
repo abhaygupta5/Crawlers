@@ -64,9 +64,14 @@ DOWNLOAD_DELAY = 1
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#     'CrawlBot.pipelines.IndiabixPipeline': 300,
-# }
+ITEM_PIPELINES = {
+    # 'CrawlBot.pipelines.IndiabixPipeline': 500,
+    'CrawlBot.pipelines.SendCSVFilePipeline': 400,
+    'CrawlBot.pipelines.CsvExporterPipeline': 300,
+    'CrawlBot.pipelines.CleanDataPipeline': 200
+
+
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -108,3 +113,39 @@ URL_TO_SEND = 'http://10.177.7.134:9000/file/upload'
 #FEED_FORMAT = "csv"
 #FEED_URI = "IndiaBixSingle.csv"
 #FEED_EXPORT_FIELDS = ["question_text", "answer_1", "answer_2", "answer_3", "answer_type", "right_answer", "question_type", "difficulty_level", "binary_file_path"]
+
+# LOG_LEVEL = 'DEBUG'
+
+
+
+
+
+
+# from scrapy.settings.default_settings import DOWNLOADER_MIDDLEWARES
+#
+# DOWNLOADER_MIDDLEWARES.update({
+#     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+#     'scrapy_rotated_proxy.downloadmiddlewares.proxy.RotatedProxyMiddleware': 750,
+# })
+# ROTATED_PROXY_ENABLED = True
+# PROXY_STORAGE = 'scrapy_rotated_proxy.extensions.file_storage.FileProxyStorage'
+# # When set PROXY_FILE_PATH='', scrapy-rotated-proxy
+# # will use proxy in Spider Settings default.
+# PROXY_FILE_PATH = ''
+# HTTP_PROXIES = [
+#     'http://proxy0:8888',
+#     'http://user:pass@proxy1:8888',
+#     'https://user:pass@proxy1:8888',
+# ]
+# HTTPS_PROXIES = [
+#     'http://proxy0:8888',
+#     'http://user:pass@proxy1:8888',
+#     'https://user:pass@proxy1:8888',
+# ]
+
+
+#
+# DOWNLOADER_MIDDLEWARES.update({
+#     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+#     'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
+# })

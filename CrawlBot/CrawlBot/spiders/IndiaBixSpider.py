@@ -1,33 +1,13 @@
 import scrapy
 from ..items import QuestionItem
-import math
 import random
 import re
-import os
-from scrapy import signals
-from scrapy.xlib.pydispatch import dispatcher
-import requests
-from ..settings import URL_TO_SEND
 
 from ..configurations import IndiaBixSingleSpiderConfig, IndiaBixArrangeSpiderConfig
 
 
 class IndiaBixSingleSpider(scrapy.Spider):
     name = "IndiaBixSingleSpider"
-
-    def __init__(self, filename='', **kwargs):
-        self.fileName = filename
-        dispatcher.connect(self.spider_closed, signals.spider_closed)
-        super(IndiaBixSingleSpider, self).__init__(**kwargs)
-
-    def spider_closed(self, spider):
-        multipart_form_data = {
-            'file': (self.fileName, open(self.fileName, 'rb')),
-        }
-        response = requests.post(URL_TO_SEND, files=multipart_form_data)
-        print(response.text)
-        print("ENDING OF SPIDER")
-
     conf = IndiaBixSingleSpiderConfig(name).load_configs()
     start_urls = conf.get_starting_urls()
 
@@ -88,9 +68,7 @@ class IndiaBixSingleSpider(scrapy.Spider):
         # logic to filter
 
         for index in range(number_of_questions):
-            difficulty_index = 0
             item = QuestionItem()
-            item['_id'] = questions[index]
             item['question_text'] = questions[index]
             item['binary_file_path'] = None
             item['question_type'] = question_type
@@ -101,7 +79,6 @@ class IndiaBixSingleSpider(scrapy.Spider):
             random_correct_index = random.choice([1, 2, 3])
 
             if str(correct_answers[index]) == "A":
-                # item['right_answer'] = options_A[index]
                 if random_correct_index == 1:
                     item['answer_1'] = options_A[index]
                     item['answer_2'] = options_B[index]
@@ -118,7 +95,6 @@ class IndiaBixSingleSpider(scrapy.Spider):
                     item['answer_2'] = options_D[index]
                     item['right_answer'] = "C"
             elif str(correct_answers[index]) == "B":
-                # item['right_answer'] = options_B[index]
                 if random_correct_index == 1:
                     item['answer_1'] = options_B[index]
                     item['answer_2'] = options_A[index]
@@ -135,7 +111,6 @@ class IndiaBixSingleSpider(scrapy.Spider):
                     item['answer_2'] = options_D[index]
                     item['right_answer'] = "C"
             elif str(correct_answers[index]) == "C":
-                # item['right_answer'] = options_C[index]
                 if random_correct_index == 1:
                     item['answer_1'] = options_C[index]
                     item['answer_2'] = options_B[index]
@@ -152,7 +127,6 @@ class IndiaBixSingleSpider(scrapy.Spider):
                     item['answer_2'] = options_D[index]
                     item['right_answer'] = "C"
             else:
-                # item['right_answer'] = options_D[index]
                 if random_correct_index == 1:
                     item['answer_1'] = options_D[index]
                     item['answer_2'] = options_B[index]
@@ -180,19 +154,6 @@ class IndiaBixSingleSpider(scrapy.Spider):
 class IndiaBixArrangeSpider(scrapy.Spider):
     name = "IndiaBixArrangeSpider"
 
-    def __init__(self, filename='', **kwargs):
-        self.fileName = filename
-        dispatcher.connect(self.spider_closed, signals.spider_closed)
-        super(IndiaBixArrangeSpider, self).__init__(**kwargs)
-
-    def spider_closed(self, spider):
-        multipart_form_data = {
-            'file': (self.fileName, open(self.fileName, 'rb')),
-        }
-        response = requests.post(URL_TO_SEND, files=multipart_form_data)
-        print(response.text)
-        print("ENDING OF SPIDER")
-
     conf = IndiaBixArrangeSpiderConfig(name).load_configs()
     start_urls = conf.get_starting_urls()
     custom_settings = {
@@ -206,7 +167,6 @@ class IndiaBixArrangeSpider(scrapy.Spider):
     default_answer_type = ''
 
     def parse(self, response):
-        print(self.fileName)
         try:
             difficulty_level = self.conf.get_difficulty_level(response.url, self.default_difficulty_level)
             category = self.conf.get_category(response.url, self.default_category)
@@ -256,7 +216,7 @@ class IndiaBixArrangeSpider(scrapy.Spider):
 
         for index in range(len(question_numbers)):
             item = QuestionItem()
-            item['_id'] = questions[index] + "\n" + re.sub(r'(\d{1})', r' \1', responses[index])
+            # item['_id'] = questions[index] + "\n" + re.sub(r'(\d{1})', r' \1', responses[index])
             question_text = questions[index].strip() + re.sub(r'(\d{1})', r' \1', responses[index]).strip()
             question_text = re.sub(r"\s+", " ",question_text.replace('\n', ' ')).replace('\"', '').replace("\'", "\\'")
             item['question_text'] = question_text

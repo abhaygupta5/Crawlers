@@ -3,29 +3,12 @@ from ..configurations import YoutubePlaylistSpiderConfig
 import scrapy
 import random
 import re
-from scrapy import signals
-from scrapy.xlib.pydispatch import dispatcher
-import requests
 from selenium import webdriver
-from ..settings import URL_TO_SEND
+import logging
 
 
 class YoutubePlaylistSpider(scrapy.Spider):
     name = "YoutubePlaylistSpider"
-
-    def __init__(self, filename='', **kwargs):
-        self.fileName = filename
-        dispatcher.connect(self.spider_closed, signals.spider_closed)
-        super(YoutubePlaylistSpider, self).__init__(**kwargs)
-
-    def spider_closed(self, spider):
-        multipart_form_data = {
-            'file': (self.fileName, open(self.fileName, 'rb')),
-        }
-        response = requests.post(URL_TO_SEND, files=multipart_form_data)
-        print(response.text)
-        print("ENDING OF SPIDER")
-
     conf = YoutubePlaylistSpiderConfig(name).load_configs()
     start_urls = conf.get_starting_urls()
     custom_settings = {
@@ -37,16 +20,17 @@ class YoutubePlaylistSpider(scrapy.Spider):
     XPATH_TITLES = '//*[@id="video-title"]'
     XPATH_CATEGORY = '//*[(@id = "title")]//*[contains(concat( " ", @class, " " ), concat( " ", "yt-formatted-string", " " ))]'
 
-
     default_difficulty_level = ''
     default_category = ''
     default_question_type = ''
     default_answer_type = ''
 
+    def __init__(self):
+        self.selenium_options = webdriver.ChromeOptions()
+        self.selenium_options.add_argument('headless')
+        self.driver = webdriver.Chrome(executable_path=self.path, chrome_options=self.selenium_options)
+
     def parse(self, response):
-        selenium_options = webdriver.ChromeOptions()
-        selenium_options.add_argument('headless')
-        driver = webdriver.Chrome(executable_path=self.path, chrome_options=selenium_options)
 
         try:
             difficulty_level = self.conf.get_difficulty_level(response.url, self.default_difficulty_level)
@@ -54,39 +38,42 @@ class YoutubePlaylistSpider(scrapy.Spider):
             question_type = self.conf.get_question_type(response.url, self.default_question_type)
             answer_type = self.conf.get_answer_type(response.url, self.default_answer_type)
 
+            '''
+            Next page urls scraped if any will also get the same category as of the current page.
+            '''
             self.default_difficulty_level = difficulty_level
             self.default_category = category
             self.default_question_type = question_type
             self.default_answer_type = answer_type
 
-            driver.get(response.url)
+            self.driver.get(response.url)
             self.conf.set_status(response.url, 'STARTED')
-            links = driver.find_elements_by_xpath(self.XPATH_LINKS)
-            titles = driver.find_elements_by_xpath(self.XPATH_TITLES)
-            category = driver.find_element_by_xpath(self.XPATH_CATEGORY).text
+            links = self.driver.find_elements_by_xpath(self.XPATH_LINKS)
+            titles = self.driver.find_elements_by_xpath(self.XPATH_TITLES)
+            category = self.driver.find_element_by_xpath(self.XPATH_CATEGORY).text
             category = re.split('[|]', category)[0]
 
             titles = [re.split('[|-]', t.text)[0] for t in titles]
-            titles = [t.replace('"', '') for t in titles]
+            # titles = [t.replace('"', '') for t in titles]
             # titles = [t.text.split('|')[0] for t in titles]
             links = [l.get_attribute('href') for l in links]
 
             self.conf.set_status(response.url, 'SUCCESS')
-            driver.close()
+            self.driver.close()
 
         except Exception, e:
-            print('Error occured', e.message)
+            logging.error('Error occured', e.message)
             self.conf.set_status(response.url, 'ERROR ' + e.message)
-            driver.close()
+            self.driver.close()
 
         num_of_songs = len(titles)
         option_a_list = titles
         option_b_list = titles[1:] + titles[:1]
         option_c_list = titles[2:] + titles[:2]
 
-        print(option_a_list)
-        print(option_b_list)
-        print(option_c_list)
+        logging.debug(option_a_list)
+        logging.debug(option_b_list)
+        logging.debug(option_c_list)
 
         correct_answer_index_list = [0 for i in range(num_of_songs)]
 
