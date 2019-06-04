@@ -6,6 +6,7 @@ from ..configurations import AudioQuizSpiderConf, MovieThemeSpiderConf
 from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
 import requests
+from ..settings import URL_TO_SEND
 
 
 class AudioQuizSpider(scrapy.Spider):
@@ -17,9 +18,11 @@ class AudioQuizSpider(scrapy.Spider):
         super(AudioQuizSpider, self).__init__(**kwargs)
 
     def spider_closed(self, spider):
-        with open(self.fileName, 'rb') as f:
-            r = requests.post('http://httpbin.org/post', files={self.fileName: f})
-            print(f.readline())
+        multipart_form_data = {
+            'file': (self.fileName, open(self.fileName, 'rb')),
+        }
+        response = requests.post(URL_TO_SEND, files=multipart_form_data)
+        print(response.text)
         print("ENDING OF SPIDER")
 
     conf = AudioQuizSpiderConf(name).load_configs()
@@ -112,9 +115,11 @@ class MovieThemeSpider(scrapy.Spider):
         super(MovieThemeSpider, self).__init__(**kwargs)
 
     def spider_closed(self, spider):
-        with open(self.fileName, 'rb') as f:
-            r = requests.post('http://httpbin.org/post', files={self.fileName: f})
-            print(f.readline())
+        multipart_form_data = {
+            'file': (self.fileName, open(self.fileName, 'rb')),
+        }
+        response = requests.post(URL_TO_SEND, files=multipart_form_data)
+        print(response.text)
         print("ENDING OF SPIDER")
 
     conf = MovieThemeSpiderConf(name).load_configs()

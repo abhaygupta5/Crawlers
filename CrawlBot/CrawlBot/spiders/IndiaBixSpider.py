@@ -7,6 +7,7 @@ import os
 from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
 import requests
+from ..settings import URL_TO_SEND
 
 from ..configurations import IndiaBixSingleSpiderConfig, IndiaBixArrangeSpiderConfig
 
@@ -20,9 +21,11 @@ class IndiaBixSingleSpider(scrapy.Spider):
         super(IndiaBixSingleSpider, self).__init__(**kwargs)
 
     def spider_closed(self, spider):
-        with open(self.fileName, 'rb') as f:
-            r = requests.post('http://httpbin.org/post', files={self.fileName: f})
-            print(f.readline())
+        multipart_form_data = {
+            'file': (self.fileName, open(self.fileName, 'rb')),
+        }
+        response = requests.post(URL_TO_SEND, files=multipart_form_data)
+        print(response.text)
         print("ENDING OF SPIDER")
 
     conf = IndiaBixSingleSpiderConfig(name).load_configs()
@@ -89,10 +92,11 @@ class IndiaBixSingleSpider(scrapy.Spider):
             item = QuestionItem()
             item['_id'] = questions[index]
             item['question_text'] = questions[index]
-            item['answer_type'] = QuestionItem.ANSWER_TYPE_SINGLE_CORRECT
             item['binary_file_path'] = None
-            item['question_type'] = QuestionItem.QUESTION_TYPE_TEXT_BASED
+            item['question_type'] = question_type
+            item['answer_type'] = answer_type
             item['difficulty_level'] = difficulty_level
+            item['category'] = category
 
             random_correct_index = random.choice([1, 2, 3])
 
@@ -182,9 +186,11 @@ class IndiaBixArrangeSpider(scrapy.Spider):
         super(IndiaBixArrangeSpider, self).__init__(**kwargs)
 
     def spider_closed(self, spider):
-        with open(self.fileName, 'rb') as f:
-            r = requests.post('http://httpbin.org/post', files={self.fileName: f})
-            print(f.readline())
+        multipart_form_data = {
+            'file': (self.fileName, open(self.fileName, 'rb')),
+        }
+        response = requests.post(URL_TO_SEND, files=multipart_form_data)
+        print(response.text)
         print("ENDING OF SPIDER")
 
     conf = IndiaBixArrangeSpiderConfig(name).load_configs()

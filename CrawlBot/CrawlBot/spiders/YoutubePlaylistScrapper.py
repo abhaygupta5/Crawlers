@@ -7,6 +7,7 @@ from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
 import requests
 from selenium import webdriver
+from ..settings import URL_TO_SEND
 
 
 class YoutubePlaylistSpider(scrapy.Spider):
@@ -18,9 +19,11 @@ class YoutubePlaylistSpider(scrapy.Spider):
         super(YoutubePlaylistSpider, self).__init__(**kwargs)
 
     def spider_closed(self, spider):
-        with open(self.fileName, 'rb') as f:
-            r = requests.post('http://httpbin.org/post', files={self.fileName: f})
-            print(f.readline())
+        multipart_form_data = {
+            'file': (self.fileName, open(self.fileName, 'rb')),
+        }
+        response = requests.post(URL_TO_SEND, files=multipart_form_data)
+        print(response.text)
         print("ENDING OF SPIDER")
 
     conf = YoutubePlaylistSpiderConfig(name).load_configs()

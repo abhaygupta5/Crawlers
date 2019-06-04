@@ -8,6 +8,7 @@ from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
 import requests
 from ..configurations import AvattoSpiderConf
+from ..settings import URL_TO_SEND
 
 
 class AvattoSpider(scrapy.Spider):
@@ -20,9 +21,11 @@ class AvattoSpider(scrapy.Spider):
         super(AvattoSpider, self).__init__(**kwargs)
 
     def spider_closed(self, spider):
-        with open(self.fileName, 'rb') as f:
-            r = requests.post('http://httpbin.org/post', files={self.fileName: f})
-            print(f.readline())
+        multipart_form_data = {
+            'file': (self.fileName, open(self.fileName, 'rb')),
+        }
+        response = requests.post(URL_TO_SEND, files=multipart_form_data)
+        print(response.text)
         print("ENDING OF SPIDER")
 
     conf = AvattoSpiderConf(name).load_configs()

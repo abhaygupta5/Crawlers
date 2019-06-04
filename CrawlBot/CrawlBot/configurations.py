@@ -300,7 +300,7 @@ class IndiaBixArrangeSpiderConfig(SpiderConfig):
         data = {
             'spider_name': self.spider_name,
             'num_of_threads': 20,
-            'delay': 2,
+            'delay': 0,
             'web_pages': [
 
                 {

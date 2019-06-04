@@ -101,6 +101,8 @@ FIELDS_TO_EXPORT = [
 ]
 CSV_DELIMITER = ";"
 
+URL_TO_SEND = 'http://10.177.7.134:9000/file/upload'
+
 # Command to run csv scrapy crawl IndiaBixArrangeSpider -o test.csv -a filename=test.csv -t csv -a CSV_DELIMITER=";"
 
 #FEED_FORMAT = "csv"
